@@ -1,0 +1,41 @@
+{
+  "name": "redacted",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3002",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "build:worker": "opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion",
+    "dev:worker": "opennextjs-cloudflare dev",
+    "preview": "opennextjs-cloudflare preview",
+    "deploy": "pnpm run build:worker && opennextjs-cloudflare deploy -- --keep-vars"
+  },
+  "dependencies": {
+    "@burnt-labs/abstraxion": "^1.0.0-alpha.73",
+    "@burnt-labs/ui": "^1.0.0-alpha.23",
+    "@cosmjs/cosmwasm-stargate": "^0.38.1",
+    "@reclaimprotocol/js-sdk": "^4.7.1",
+    "next": "14.2.29",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@cosmjs/proto-signing": "^0.38.1",
+    "@cosmjs/stargate": "^0.38.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.29",
+    "postcss": "^8",
+    "tailwindcss": "^3",
+    "tsx": "^4.21.0",
+    "typescript": "^5",
+    "@opennextjs/cloudflare": "^1",
+    "wrangler": "^4"
+  },
+  "packageManager": "pnpm@10.28.1+sha512.7d7dbbca9e99447b7c3bf7a73286afaaf6be99251eb9498baefa7d406892f67b879adb3a1d7e687fc4ccc1a388c7175fbaae567a26ab44d1067b54fcb0d6a316"
+}

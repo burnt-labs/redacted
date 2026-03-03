@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f5f0e8;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+  <script defer src="https://apiv3.droplinked.com/widget/bundle"></script>
+  <script>
+    // Inject styles into shadow DOM to match page background
+    function patchShadow() {
+      var el = document.querySelector('droplinked-product');
+      if (!el || !el.shadowRoot) return;
+      if (el.shadowRoot.querySelector('#bg-fix')) {
+        clearInterval(patchInterval);
+        return;
+      }
+      // Walk all elements inside shadow DOM and override white backgrounds
+      var style = document.createElement('style');
+      style.id = 'bg-fix';
+      style.textContent = [
+        ':host { background: #f5f0e8 !important; }',
+        'div, section, main, article, aside, .card, [class*="card"], [class*="container"], [class*="wrapper"], [class*="product"] {',
+        '  background-color: #f5f0e8 !important;',
+        '  background: #f5f0e8 !important;',
+        '}',
+      ].join('\n');
+      el.shadowRoot.prepend(style);
+      clearInterval(patchInterval);
+    }
+    var patchInterval = setInterval(patchShadow, 200);
+  </script>
+</head>
+<body>
+  <droplinked-product product-id="699fa86cb7618f1bcaeaf2a7" purchase-mode="modal"></droplinked-product>
+</body>
+</html>

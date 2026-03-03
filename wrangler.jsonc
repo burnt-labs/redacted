@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "redacted",
+  "account_id": "7b5971b399673fe613f69d1f6d9a0940",
+  "compatibility_date": "2025-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": ".open-next/worker.js",
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "OAUTH3_BASE_URL": "https://b7de194832e39104e31cbb56b0efadd9fd3466b4-8080.dstack-pha-prod5.phala.network",
+    "RECLAIM_APP_ID": "0x715DcADb8884D6D3E17898d81F82257c2733E46d",
+    "MAINTENANCE_MODE": "false"
+  },
+  "workers_dev": true,
+  "preview_urls": true,
+  "routes": [
+    {
+        "pattern": "theredactedfile.com",
+        "custom_domain": true
+    },
+    {
+        "pattern": "www.theredactedfile.com",
+        "custom_domain": true
+    }
+  ]
+}

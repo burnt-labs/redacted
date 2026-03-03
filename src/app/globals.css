@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== BASE ========== */
+body {
+  font-family: "Inter", -apple-system, sans-serif;
+  background: #f5f0e8;
+  color: #111111;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Paper grain texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ========== REDACTION BARS ========== */
+.redact-inline {
+  position: relative;
+  display: inline-block;
+  font: inherit;
+}
+.redact-inline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #111111;
+}
+
+/* ========== LOADING BAR ========== */
+@keyframes loadSlide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+.loading-bar {
+  position: relative;
+  height: 2px;
+  width: 100%;
+  background: #d5cfc5;
+  overflow: hidden;
+  border-radius: 1px;
+}
+.loading-bar-inner {
+  height: 100%;
+  width: 40%;
+  background: #6b6560;
+  border-radius: 1px;
+  animation: loadSlide 1.5s ease-in-out infinite;
+}
+
+/* ========== PULSE ANIMATION ========== */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ========== RECLAIM IFRAME OVERLAY ========== */
+.reclaim-iframe-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.reclaim-iframe-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 101;
+  color: #111;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid #d5cfc5;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.reclaim-iframe-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.reclaim-iframe {
+  width: 100%;
+  max-width: 480px;
+  height: 80vh;
+  border: 1px solid #d5cfc5;
+  border-radius: 8px;
+  background: #f5f0e8;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-height: 600px) {
+  .reclaim-iframe {
+    height: 90vh;
+  }
+}

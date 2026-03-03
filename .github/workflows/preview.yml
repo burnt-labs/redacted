@@ -1,0 +1,124 @@
+name: Preview
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    environment: preview
+    permissions:
+      contents: read
+      pull-requests: write
+      deployments: write
+    # All env vars are read from .env.production (committed to repo).
+    # RECLAIM_APP_SECRET is a Cloudflare Workers runtime secret (wrangler secret put).
+    env:
+      NEXT_PUBLIC_APP_URL: https://redacted.burnt.workers.dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm build
+      - name: Create GitHub deployment
+        id: deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.pull_request.head.sha,
+              environment: 'preview',
+              auto_merge: false,
+              required_contexts: [],
+              transient_environment: true,
+              production_environment: false,
+              description: `PR #${context.issue.number} preview`,
+            });
+            core.setOutput('deployment_id', deployment.data.id);
+      - name: Upload preview version
+        id: preview
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.BURNT_CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.BURNT_CLOUDFLARE_ACCOUNT_ID }}
+          command: versions upload --message "PR #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}"
+          packageManager: pnpm
+          preCommands: pnpm build:worker
+      - name: Extract version ID and preview URL
+        id: extract
+        run: |
+          OUTPUT='${{ steps.preview.outputs.command-output }}'
+          VERSION_ID=$(echo "$OUTPUT" | grep -oP 'Version ID:\s+\K[a-f0-9-]+' || echo 'unknown')
+          PREVIEW_URL=$(echo "$OUTPUT" | grep -oP 'https://[^\s]+\.workers\.dev[^\s]*' | head -1 || echo '')
+          echo "version_id=$VERSION_ID" >> "$GITHUB_OUTPUT"
+          echo "preview_url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
+      - name: Update deployment status
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deploymentId = ${{ steps.deployment.outputs.deployment_id }};
+            const versionId = '${{ steps.extract.outputs.version_id }}';
+            const previewUrl = '${{ steps.extract.outputs.preview_url }}';
+            const success = '${{ steps.preview.outcome }}' === 'success';
+
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deploymentId,
+              state: success ? 'success' : 'failure',
+              environment_url: previewUrl || undefined,
+              description: success ? `Version ${versionId} uploaded` : 'Preview build failed',
+              environment: 'preview',
+              auto_inactive: true,
+            });
+      - name: Comment preview info
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const versionId = '${{ steps.extract.outputs.version_id }}';
+            const previewUrl = '${{ steps.extract.outputs.preview_url }}';
+
+            const body = [
+              '### 🚀 Preview Deployment',
+              '',
+              `**Version ID:** \`${versionId}\``,
+              previewUrl ? `**Preview URL:** ${previewUrl}` : '',
+              '',
+              `To deploy: \`npx wrangler versions deploy ${versionId} --percentage 100\``,
+            ].filter(Boolean).join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c =>
+              c.user.login === 'github-actions[bot]' &&
+              c.body.includes('### 🚀 Preview Deployment')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
