@@ -31,7 +31,7 @@ export default function RootLayout({
     authentication: {
       type: "redirect" as const,
       callbackUrl: typeof window !== "undefined"
-        ? window.location.origin + window.location.pathname
+        ? window.location.origin + "/verify"
         : undefined,
     },
   }), []);

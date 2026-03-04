@@ -201,10 +201,10 @@ export default function BadgeContent({ address }: { address: string }) {
           <button
             onClick={async () => {
               try {
-                await navigator.clipboard.writeText("https://theredactedfile.com");
+                await navigator.clipboard.writeText(window.location.origin);
               } catch {
                 const input = document.createElement("input");
-                input.value = "https://theredactedfile.com";
+                input.value = window.location.origin;
                 document.body.appendChild(input);
                 input.select();
                 document.execCommand("copy");
@@ -218,7 +218,7 @@ export default function BadgeContent({ address }: { address: string }) {
             {copied ? "Copied!" : "Copy Link"}
           </button>
           <a
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("I wasn\u2019t on the Epstein list. Were you?\n\nProve it.\n\nhttps://theredactedfile.com")}`}
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("I wasn\u2019t on the Epstein list. Were you?\n\nProve it.\n\n")}${encodeURIComponent(window.location.origin)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="font-mono text-[11px] tracking-[0.1em] uppercase text-fg-muted border border-border px-4 py-2 no-underline transition-all hover:border-fg hover:text-fg text-center"
