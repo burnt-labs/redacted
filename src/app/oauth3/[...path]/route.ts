@@ -21,7 +21,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const OAUTH3_BASE_URL = process.env.OAUTH3_BASE_URL;
 
-const ALLOWED_OAUTH3_HOSTS = ["theredactedfile.com", "phala.network"];
+const ALLOWED_OAUTH3_HOSTS = ["theredactedfile.com", "phala.network", "burnt.com"];
 
 // Hop-by-hop headers that must not be forwarded between hops.
 const HOP_BY_HOP = new Set([
