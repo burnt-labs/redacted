@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// The OAuth flow goes through the /oauth3 proxy route so that the CVM's
-// session cookie is set on the same origin Google redirects back to.
-// The proxy uses `redirect: "manual"` to avoid serving Google's HTML
-// under our domain (which would break CSP / CORS).
-const PROD_URL = "https://theredactedfile.com";
+// Redirect through the /oauth3 reverse-proxy to start Google auth.
+// The proxy forwards requests to the CVM with `redirect: "manual"`,
+// so the CVM's 302 → Google is forwarded as-is to the browser.
+//
+// Cookies (CSRF state, session) are set on theredactedfile.com by
+// the proxy — no tokens ever appear in URLs.
 
 export async function GET(request: NextRequest) {
-  const host = request.nextUrl.hostname;
-
-  // For local dev and Cloudflare Workers preview deployments, use the actual
-  // request origin so the callback and proxy route resolve to the right host.
-  // In production, use PROD_URL for the canonical domain.
-  const isPreview = host === "localhost" || host.endsWith(".workers.dev");
-  const origin = isPreview ? request.nextUrl.origin : PROD_URL;
-
-  const returnTo = encodeURIComponent(`${origin}/api/oauth3/callback`);
-  const authUrl = `${origin}/oauth3/auth/google?return_to=${returnTo}`;
+  const returnTo = encodeURIComponent("/api/oauth3/callback");
+  const authUrl = `${request.nextUrl.origin}/oauth3/auth/google?return_to=${returnTo}`;
   return NextResponse.redirect(authUrl);
 }
