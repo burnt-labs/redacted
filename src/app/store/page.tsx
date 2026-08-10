@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import {
   useAbstraxionAccount,
   useAbstraxionClient,
-} from "@burnt-labs/abstraxion";
+} from "@burnt-labs/abstraxion-react";
 import {
   isCleared,
   getUserBadge,

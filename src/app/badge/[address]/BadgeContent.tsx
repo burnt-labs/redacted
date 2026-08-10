@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { useAbstraxionClient, useAbstraxionAccount } from "@burnt-labs/abstraxion";
+import { useAbstraxionClient, useAbstraxionAccount } from "@burnt-labs/abstraxion-react";
 import {
   getUserBadge,
   getBadgeInfo,

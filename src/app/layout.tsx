@@ -1,7 +1,7 @@
 "use client";
 import "./globals.css";
 import { useMemo } from "react";
-import { AbstraxionProvider } from "@burnt-labs/abstraxion";
+import { AbstraxionProvider } from "@burnt-labs/abstraxion-react";
 import { XION_CHAIN_ID, XION_RPC, XION_REST } from "@/lib/xion-config";
 import "@burnt-labs/ui/dist/index.css";
 
