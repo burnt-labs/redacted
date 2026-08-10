@@ -13,7 +13,7 @@
     "deploy": "pnpm run build:worker && opennextjs-cloudflare deploy -- --keep-vars"
   },
   "dependencies": {
-    "@burnt-labs/abstraxion": "^1.0.0-alpha.73",
+    "@burnt-labs/abstraxion-react": "^1.0.0-alpha.82",
     "@burnt-labs/ui": "^1.0.0-alpha.23",
     "@cosmjs/cosmwasm-stargate": "^0.38.1",
     "@reclaimprotocol/js-sdk": "^4.7.1",
