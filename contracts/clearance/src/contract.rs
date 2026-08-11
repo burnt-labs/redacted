@@ -9,7 +9,7 @@ use crate::msg::{
     BadgeCountResponse, ConfigResponse, Cw721ExecuteMsg, Cw721QueryMsg, ExecuteMsg,
     InstantiateMsg, MigrateMsg, QueryMsg, TeePubkeyResponse, TokensResponse, VerificationResult,
 };
-use crate::state::{Config, OldConfig, BADGE_COUNT, CONFIG, OLD_CONFIG};
+use crate::state::{Config, BADGE_COUNT, CONFIG, OLD_CONFIG};
 
 #[entry_point]
 pub fn instantiate(

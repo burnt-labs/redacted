@@ -35,13 +35,12 @@ function cleanupExpiredEntries() {
 }
 
 function getClientIP(request: NextRequest): string {
-  // On Vercel, x-forwarded-for is set by the platform and cannot be
-  // spoofed by clients. On other platforms, ensure your reverse proxy
-  // strips/overwrites this header.
+  // Cloudflare provides cf-connecting-ip; Vercel provides x-forwarded-for.
+  // On other platforms, ensure the reverse proxy strips or overwrites these.
   return (
+    request.headers.get("cf-connecting-ip") ||
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     request.headers.get("x-real-ip") ||
-    request.ip ||
     "unknown"
   );
 }

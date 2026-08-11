@@ -23,6 +23,7 @@ jobs:
           node-version: lts/*
       - uses: pnpm/action-setup@v4
       - run: pnpm install --frozen-lockfile
+      - run: pnpm check:dependency-security
       - run: pnpm lint
       - run: pnpm build
       - name: Upload preview version
