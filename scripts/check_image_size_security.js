@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const { Buffer } = require('node:buffer');
+const { execFileSync } = require('node:child_process');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -15,6 +16,54 @@ assert.equal(
   'file:third_party/image-size',
   'the application must install the repo-local image-size package',
 );
+assert.equal(
+  appPackage.pnpm.overrides['image-size'],
+  '$image-size',
+  'pnpm must override every transitive image-size request with the direct local package',
+);
+
+const lockfile = fs.readFileSync(path.resolve(__dirname, '..', 'pnpm-lock.yaml'), 'utf8');
+const lockfileImageSizeResolutions = [
+  ...lockfile.matchAll(/^  image-size@(.+):$/gm),
+].map((match) => match[1]);
+assert.ok(lockfileImageSizeResolutions.length > 0, 'the lockfile must contain image-size');
+assert.deepEqual(
+  [...new Set(lockfileImageSizeResolutions)],
+  ['file:third_party/image-size'],
+  'every lockfile image-size package must resolve to the repo-local build',
+);
+
+const dependencyTree = JSON.parse(
+  execFileSync('pnpm', ['list', 'image-size', '--depth', 'Infinity', '--json'], {
+    encoding: 'utf8',
+  }),
+);
+const imageSizeInstallations = new Map();
+const pendingDependencies = [...dependencyTree];
+while (pendingDependencies.length > 0) {
+  const dependency = pendingDependencies.pop();
+  for (const groupName of ['dependencies', 'devDependencies', 'optionalDependencies']) {
+    for (const [name, child] of Object.entries(dependency[groupName] || {})) {
+      if (name === 'image-size') {
+        imageSizeInstallations.set(child.path, child);
+      }
+      pendingDependencies.push(child);
+    }
+  }
+}
+assert.ok(imageSizeInstallations.size > 0, 'the installed dependency tree must contain image-size');
+for (const installation of imageSizeInstallations.values()) {
+  assert.equal(
+    installation.version,
+    'file:third_party/image-size',
+    'every installed image-size version must be the repo-local build',
+  );
+  assert.equal(
+    fs.realpathSync(installation.path),
+    fs.realpathSync(installedImageSizeRoot),
+    'every installed image-size path must resolve to the audited package instance',
+  );
+}
 assert.equal(
   imageSizePackage.version,
   '2.0.3-burnt.1',

@@ -36,8 +36,10 @@ function cleanupExpiredEntries() {
 
 function getClientIP(request: NextRequest): string {
   // Only trust Cloudflare's client IP when its request marker is present.
-  if (request.headers.has("cf-ray")) {
-    return request.headers.get("cf-connecting-ip") || "unknown";
+  const cfRay = request.headers.get("cf-ray");
+  const cfConnectingIp = request.headers.get("cf-connecting-ip");
+  if (cfRay && cfConnectingIp) {
+    return cfConnectingIp;
   }
 
   // Vercel overwrites x-forwarded-for at the trusted platform boundary.
