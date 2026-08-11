@@ -3,6 +3,31 @@ const { Buffer } = require('node:buffer');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+
+const imageSizePackagePath = require.resolve('image-size/package.json');
+const installedImageSizeRoot = path.dirname(imageSizePackagePath);
+const vendoredImageSizeRoot = path.resolve(__dirname, '..', 'third_party', 'image-size');
+const appPackage = require('../package.json');
+const imageSizePackage = require(imageSizePackagePath);
+
+assert.equal(
+  appPackage.devDependencies['image-size'],
+  'file:third_party/image-size',
+  'the application must install the repo-local image-size package',
+);
+assert.equal(
+  imageSizePackage.version,
+  '2.0.3-burnt.1',
+  'the installed image-size package must be the patched Burnt build',
+);
+for (const relativePath of ['dist/index.js', 'dist/types/icns.js', 'dist/types/utils.js']) {
+  assert.equal(
+    fs.readFileSync(path.join(installedImageSizeRoot, relativePath), 'utf8'),
+    fs.readFileSync(path.join(vendoredImageSizeRoot, relativePath), 'utf8'),
+    `the installed image-size ${relativePath} must match the vendored patch`,
+  );
+}
+
 const imageSize = require('image-size');
 const { findBox } = require('image-size/dist/types/utils.js');
 

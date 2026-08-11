@@ -35,14 +35,13 @@ function cleanupExpiredEntries() {
 }
 
 function getClientIP(request: NextRequest): string {
-  // Cloudflare provides cf-connecting-ip; Vercel provides x-forwarded-for.
-  // On other platforms, ensure the reverse proxy strips or overwrites these.
-  return (
-    request.headers.get("cf-connecting-ip") ||
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
+  // Only trust Cloudflare's client IP when its request marker is present.
+  if (request.headers.has("cf-ray")) {
+    return request.headers.get("cf-connecting-ip") || "unknown";
+  }
+
+  // Vercel overwrites x-forwarded-for at the trusted platform boundary.
+  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
 }
 
 export function middleware(request: NextRequest) {
