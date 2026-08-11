@@ -62,12 +62,32 @@ assert.throws(
 
 const tempDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'image-size-'));
 const largeIcnsPath = path.join(tempDirectory, 'large.icns');
+const cappedPrefixLength = 512 * 1024;
+const splitHeaderIcns = Buffer.alloc(cappedPrefixLength + 12);
+splitHeaderIcns.write('icns', 0, 'ascii');
+splitHeaderIcns.writeUInt32BE(splitHeaderIcns.length, 4);
+splitHeaderIcns.write('ic10', 8, 'ascii');
+splitHeaderIcns.writeUInt32BE(cappedPrefixLength - 12, 12);
+splitHeaderIcns.write('ic09', cappedPrefixLength - 4, 'ascii');
+splitHeaderIcns.writeUInt32BE(16, cappedPrefixLength);
+const splitHeaderIcnsPath = path.join(tempDirectory, 'split-header.icns');
 try {
   fs.writeFileSync(largeIcnsPath, largeIcns);
   assert.deepEqual(
     imageSize(largeIcnsPath),
     { width: 1024, height: 1024, type: 'ic10' },
     'valid ICNS files larger than the read cap must be detected from their bounded prefix',
+  );
+  fs.writeFileSync(splitHeaderIcnsPath, splitHeaderIcns);
+  assert.deepEqual(
+    imageSize(splitHeaderIcnsPath),
+    {
+      width: 1024,
+      height: 1024,
+      images: [{ width: 1024, height: 1024, type: 'ic10' }],
+      type: 'icns',
+    },
+    'ICNS entry headers split by the read cap must not invalidate the file-path API',
   );
 } finally {
   fs.rmSync(tempDirectory, { recursive: true });

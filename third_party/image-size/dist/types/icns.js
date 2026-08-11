@@ -101,7 +101,7 @@ exports.ICNS = {
             images: [imageSize],
             width: imageSize.width,
         };
-        while (imageOffset < fileLength && imageOffset < inputLength) {
+        while (imageOffset < fileLength && imageOffset + SIZE_HEADER <= inputLength) {
             imageHeader = readImageHeader(input, imageOffset, fileLength);
             imageSize = getImageSize(imageHeader[0]);
             imageOffset += imageHeader[1];
