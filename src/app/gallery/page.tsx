@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useAbstraxionClient } from "@burnt-labs/abstraxion";
+import { useAbstraxionClient } from "@burnt-labs/abstraxion-react";
 import {
   getAllBadges,
   getBadgeInfo,

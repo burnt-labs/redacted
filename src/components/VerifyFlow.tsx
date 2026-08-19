@@ -4,8 +4,13 @@ import {
   useAbstraxionAccount,
   useAbstraxionSigningClient,
   useAbstraxionClient,
-} from "@burnt-labs/abstraxion";
-import { submitProof, submitReclaimProof, isCleared } from "@/lib/contracts";
+} from "@burnt-labs/abstraxion-react";
+import {
+  isCleared,
+  isContractSigningClient,
+  submitProof,
+  submitReclaimProof,
+} from "@/lib/contracts";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type VerifyStep =
@@ -325,7 +330,7 @@ export default function VerifyFlow() {
       }
 
       setStep("submitting");
-      if (!client || !account?.bech32Address) {
+      if (!isContractSigningClient(client) || !account?.bech32Address) {
         throw new Error("Account not connected");
       }
 
@@ -377,7 +382,7 @@ export default function VerifyFlow() {
       setStep("submitting");
       setError("");
       try {
-        if (!client || !account?.bech32Address) {
+        if (!isContractSigningClient(client) || !account?.bech32Address) {
           throw new Error("Account not connected");
         }
 
