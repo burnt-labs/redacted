@@ -12,6 +12,15 @@ interface SigningClient extends QueryClient {
   ): Promise<{ transactionHash: string }>;
 }
 
+export function isContractSigningClient(client: unknown): client is SigningClient {
+  if (!client || typeof client !== "object") return false;
+  const candidate = client as Partial<SigningClient>;
+  return (
+    typeof candidate.execute === "function" &&
+    typeof candidate.queryContractSmart === "function"
+  );
+}
+
 // Contract addresses from env
 export const CLEARANCE_CONTRACT = process.env.NEXT_PUBLIC_CLEARANCE_CONTRACT || "";
 export const NFT_CONTRACT = process.env.NEXT_PUBLIC_NFT_CONTRACT || "";

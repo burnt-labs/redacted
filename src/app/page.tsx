@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useAbstraxionClient } from "@burnt-labs/abstraxion";
+import { useAbstraxionClient } from "@burnt-labs/abstraxion-react";
 import { getBadgeCount, NFT_CONTRACT, RECLAIM_NFT_CONTRACT } from "@/lib/contracts";
 import Nav from "@/components/Nav";
 
@@ -56,7 +56,7 @@ export default function Home() {
             : "Prove you never emailed Jeffrey Epstein. Publicly. Permanently."}
         </p>
 
-        {badgeCount !== null && (
+        {badgeCount !== null && badgeCount >= 10000 && (
           <div className="inline-flex items-center gap-2.5 font-mono text-[12px] text-fg-muted border border-border bg-bg-paper px-[18px] py-2 mb-10">
             <span className="w-[7px] h-[7px] bg-cleared rounded-full animate-pulse-slow" />
             <span><strong className="text-fg font-bold">{badgeCount.toLocaleString()}</strong> clearances issued</span>

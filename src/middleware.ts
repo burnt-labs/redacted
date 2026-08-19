@@ -21,6 +21,10 @@ const ALLOWED_HOSTS = [
   "localhost",
 ];
 
+function isAllowedHost(hostname: string): boolean {
+  return ALLOWED_HOSTS.includes(hostname) || hostname.endsWith(".workers.dev");
+}
+
 function cleanupExpiredEntries() {
   const now = Date.now();
   rateLimitMap.forEach((entry, key) => {
@@ -65,7 +69,7 @@ export function middleware(request: NextRequest) {
     if (origin) {
       try {
         const originHost = new URL(origin).hostname;
-        if (!ALLOWED_HOSTS.includes(originHost)) {
+        if (!isAllowedHost(originHost)) {
           return NextResponse.json(
             { error: "Forbidden" },
             { status: 403 }

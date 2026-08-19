@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useAbstraxionAccount } from "@burnt-labs/abstraxion";
+import { useAbstraxionAccount } from "@burnt-labs/abstraxion-react";
 
 const GOOGLE_BLOCKED = process.env.NEXT_PUBLIC_GOOGLE_BLOCKED === "true";
 

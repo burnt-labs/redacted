@@ -24,13 +24,13 @@ export default function OverloadedPage() {
 
   const handleCopyLink = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText("https://theredactedfile.com");
+      await navigator.clipboard.writeText(window.location.origin);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Fallback for older browsers
       const input = document.createElement("input");
-      input.value = "https://theredactedfile.com";
+      input.value = window.location.origin;
       document.body.appendChild(input);
       input.select();
       document.execCommand("copy");

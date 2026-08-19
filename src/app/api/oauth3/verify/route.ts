@@ -10,9 +10,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Read the OAuth3 session token from our localhost cookie
-  const token = request.cookies.get("oauth3_token")?.value;
-  if (!token) {
+  // The CVM's session cookie (`sid`) was set on this domain by the
+  // /oauth3 reverse proxy during Google auth.  Forward it to the CVM
+  // so the SessionUser extractor can authenticate the request.
+  const sid = request.cookies.get("sid")?.value;
+  if (!sid) {
     return NextResponse.json(
       { error: "Not authenticated with OAuth3. Please sign in first." },
       { status: 401 }
@@ -46,13 +48,13 @@ export async function POST(request: NextRequest) {
 
   try {
     // Single call to OAuth3's TEE-attested verification endpoint.
-    // The CVM should revoke the Google OAuth token immediately after
-    // completing the Gmail search (POST https://oauth2.googleapis.com/revoke).
+    // The CVM revokes the Google OAuth token immediately after
+    // completing the Gmail search and unlinks the identity.
     const res = await fetch(`${OAUTH3_BASE_URL}/verify/gmail`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Cookie: `sid=${sid}`,
       },
       body: JSON.stringify({ address, suspect: "jeevacation@gmail.com" }),
     });
@@ -67,17 +69,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await res.json(); // { result: "<json string>", quote: "<base64>" }
-    const response = NextResponse.json(data);
-
-    // Delete the OAuth3 token — match all attributes from when it was set
-    response.cookies.set("oauth3_token", "", {
-      path: "/",
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 0,
-    });
-    return response;
+    return NextResponse.json(data);
   } catch (e) {
     console.error("OAuth3 verify error:", e instanceof Error ? e.message : "Unknown error");
     return NextResponse.json(
