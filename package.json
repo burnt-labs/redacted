@@ -17,7 +17,7 @@
     "@burnt-labs/ui": "^1.0.0-alpha.23",
     "@cosmjs/cosmwasm-stargate": "^0.38.1",
     "@reclaimprotocol/js-sdk": "^4.7.1",
-    "next": "14.2.29",
+    "next": "15.5.10",
     "react": "^18",
     "react-dom": "^18"
   },
