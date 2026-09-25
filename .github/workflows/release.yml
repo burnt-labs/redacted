@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  release:
+    # Promotion is automatic, so the main flow publishes its own releases, and
+    # releases published with the job token fire no workflow. This covers a
+    # release a person publishes by hand, for example to redeploy a tag.
+    types: [published]
+
+# contents: write is for annotate-release editing the release notes.
+permissions:
+  contents: write
+  deployments: write
+
+jobs:
+  cloudflare:
+    uses: burnt-labs/github-workflows/.github/workflows/cloudflare-release.yml@d603eb7e50827525e7325db3cc47aab3f091e701 # v1.6.0
+    with:
+      release-tag: ${{ github.event.release.tag_name }}
+      release-url: ${{ github.event.release.html_url }}
+      prerelease: ${{ github.event.release.prerelease }}
+    secrets:
+      cloudflare-account-id: ${{ secrets.BURNT_CLOUDFLARE_ACCOUNT_ID }}
+      cloudflare-api-token: ${{ secrets.BURNT_CLOUDFLARE_API_TOKEN }}

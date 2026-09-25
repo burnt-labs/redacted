@@ -1,0 +1,21 @@
+name: Push to Main
+
+on:
+  push:
+    branches: [main]
+  # Redeploy main by hand, as the old deploy workflow allowed.
+  workflow_dispatch:
+
+# contents: write is for the release drafts and publishing the release. No
+# commits or branch pushes are made; versions come from release tags rather
+# than bumping package.json.
+permissions:
+  contents: write
+  deployments: write
+
+jobs:
+  cloudflare:
+    uses: burnt-labs/github-workflows/.github/workflows/cloudflare-main.yml@d603eb7e50827525e7325db3cc47aab3f091e701 # v1.6.0
+    secrets:
+      cloudflare-account-id: ${{ secrets.BURNT_CLOUDFLARE_ACCOUNT_ID }}
+      cloudflare-api-token: ${{ secrets.BURNT_CLOUDFLARE_API_TOKEN }}
