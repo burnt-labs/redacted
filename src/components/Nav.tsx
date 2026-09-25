@@ -26,7 +26,10 @@ export default function Nav() {
         )}
         {isConnected && (
           <button
-            onClick={() => { logout(); window.location.href = "/"; }}
+            onClick={() => {
+              logout();
+              window.location.href = "/";
+            }}
             className="font-mono text-[11px] tracking-[0.1em] uppercase text-fg-muted bg-transparent border-none cursor-pointer hover:text-fg transition-colors"
           >
             Log out

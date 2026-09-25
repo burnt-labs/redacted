@@ -13,7 +13,8 @@ export default function BadgeError({
       <div className="max-w-md text-center space-y-6">
         <h1 className="font-serif text-[32px] text-fg">Badge Not Found</h1>
         <p className="text-[14px] text-fg-muted leading-[1.65]">
-          We couldn&apos;t load this clearance badge. The address may be invalid or there was a network error.
+          We couldn&apos;t load this clearance badge. The address may be invalid
+          or there was a network error.
         </p>
         <div className="flex flex-col items-center gap-3">
           <button

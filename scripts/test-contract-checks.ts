@@ -7,7 +7,10 @@
  *   XION_MNEMONIC="..." npx tsx scripts/test-contract-checks.ts  # full test suite
  */
 
-import { CosmWasmClient, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import {
+  CosmWasmClient,
+  SigningCosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from "@cosmjs/stargate";
 import { createHash } from "crypto";
@@ -50,7 +53,8 @@ function buildQuote(opts: {
   buf.writeUInt16LE(opts.version ?? 4, 0);
   buf.writeUInt32LE(opts.teeType ?? 0x81, 4);
   if (opts.attKey) opts.attKey.copy(buf, 0x2bc, 0, 64);
-  if (opts.reportData) opts.reportData.copy(buf, 0x238, 0, Math.min(opts.reportData.length, 64));
+  if (opts.reportData)
+    opts.reportData.copy(buf, 0x238, 0, Math.min(opts.reportData.length, 64));
   if (opts.signature) opts.signature.copy(buf, 0x27c, 0, 64);
   return buf;
 }
@@ -81,7 +85,10 @@ async function runQueryTests() {
   // get_config
   const config = await client.queryContractSmart(CLEARANCE, { get_config: {} });
   if (config.admin && config.nft_contract) {
-    pass("get_config", `admin=${config.admin.slice(0, 15)}... nft=${config.nft_contract.slice(0, 15)}...`);
+    pass(
+      "get_config",
+      `admin=${config.admin.slice(0, 15)}... nft=${config.nft_contract.slice(0, 15)}...`,
+    );
   } else {
     fail("get_config", `unexpected response: ${JSON.stringify(config)}`);
   }
@@ -90,11 +97,16 @@ async function runQueryTests() {
   if (config.nft_contract === NFT_CONTRACT) {
     pass("nft_contract match", "on-chain config matches app env var");
   } else {
-    fail("nft_contract match", `expected ${NFT_CONTRACT}, got ${config.nft_contract}`);
+    fail(
+      "nft_contract match",
+      `expected ${NFT_CONTRACT}, got ${config.nft_contract}`,
+    );
   }
 
   // get_badge_count
-  const badges = await client.queryContractSmart(CLEARANCE, { get_badge_count: {} });
+  const badges = await client.queryContractSmart(CLEARANCE, {
+    get_badge_count: {},
+  });
   if (typeof badges.count === "number") {
     pass("get_badge_count", `${badges.count} badges minted`);
   } else {
@@ -102,7 +114,9 @@ async function runQueryTests() {
   }
 
   // get_tee_pubkey
-  const tee = await client.queryContractSmart(CLEARANCE, { get_tee_pubkey: {} });
+  const tee = await client.queryContractSmart(CLEARANCE, {
+    get_tee_pubkey: {},
+  });
   if (tee.pubkey === TEE_PUBKEY_HEX) {
     pass("get_tee_pubkey", "matches expected CVM attestation key");
   } else {
@@ -113,15 +127,26 @@ async function runQueryTests() {
   if (tee.pubkey.length === 128) {
     pass("tee_pubkey length", "64 bytes (valid P-256 x||y)");
   } else {
-    fail("tee_pubkey length", `expected 128 hex chars, got ${tee.pubkey.length}`);
+    fail(
+      "tee_pubkey length",
+      `expected 128 hex chars, got ${tee.pubkey.length}`,
+    );
   }
 
   // Cross-check: query NFT contract for num_tokens
-  const nftCount = await client.queryContractSmart(NFT_CONTRACT, { num_tokens: {} });
+  const nftCount = await client.queryContractSmart(NFT_CONTRACT, {
+    num_tokens: {},
+  });
   if (nftCount.count === badges.count) {
-    pass("badge count cross-check", `clearance counter (${badges.count}) == NFT num_tokens (${nftCount.count})`);
+    pass(
+      "badge count cross-check",
+      `clearance counter (${badges.count}) == NFT num_tokens (${nftCount.count})`,
+    );
   } else {
-    fail("badge count cross-check", `clearance=${badges.count} vs NFT=${nftCount.count}`);
+    fail(
+      "badge count cross-check",
+      `clearance=${badges.count} vs NFT=${nftCount.count}`,
+    );
   }
 
   client.disconnect();
@@ -188,7 +213,8 @@ function buildExecuteTests(sender: string): TestCase[] {
     // proving the contract catches any post-hoc tampering.
     {
       name: "Check 5: REPORTDATA mismatch (real TDX quote, tampered result)",
-      result: '{"address":"xion1fake","clean":true,"message_count":0,"suspect":"x","timestamp":0}',
+      result:
+        '{"address":"xion1fake","clean":true,"message_count":0,"suspect":"x","timestamp":0}',
       quote: hexToBase64(REAL_QUOTE_HEX),
       expectedError: "report_data mismatch",
     },
@@ -199,11 +225,17 @@ async function runExecuteTests() {
   const mnemonic = process.env.XION_MNEMONIC;
   if (!mnemonic) {
     console.log("── Execute tests (skipped — no XION_MNEMONIC) ──\n");
-    console.log("  To run: XION_MNEMONIC=\"your mnemonic\" npx tsx scripts/test-contract-checks.ts\n");
-    console.log("  These tests send crafted bad proofs to the contract and verify");
+    console.log(
+      '  To run: XION_MNEMONIC="your mnemonic" npx tsx scripts/test-contract-checks.ts\n',
+    );
+    console.log(
+      "  These tests send crafted bad proofs to the contract and verify",
+    );
     console.log("  each validation check rejects with the correct error.\n");
     console.log("  Checks 1-5 are tested (check 5 uses a real TDX quote).");
-    console.log("  Checks 6-9 require a matching result+quote pair → test via the real flow.\n");
+    console.log(
+      "  Checks 6-9 require a matching result+quote pair → test via the real flow.\n",
+    );
     return;
   }
 
@@ -227,7 +259,7 @@ async function runExecuteTests() {
         sender,
         CLEARANCE,
         { submit_proof: { result: test.result, quote: test.quote } },
-        "auto"
+        "auto",
       );
       fail(test.name, "tx succeeded (should have been rejected)");
     } catch (err: any) {
@@ -235,7 +267,10 @@ async function runExecuteTests() {
       if (msg.toLowerCase().includes(test.expectedError.toLowerCase())) {
         pass(test.name, `rejected: "${test.expectedError}"`);
       } else {
-        fail(test.name, `wrong error — expected "${test.expectedError}", got: "${msg.slice(0, 150)}"`);
+        fail(
+          test.name,
+          `wrong error — expected "${test.expectedError}", got: "${msg.slice(0, 150)}"`,
+        );
       }
     }
   }

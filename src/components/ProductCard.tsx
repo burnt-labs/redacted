@@ -63,7 +63,11 @@ export default function ProductCard({ badgeId }: { badgeId: string | null }) {
         !checkoutHost.endsWith(".droplinked.io") &&
         checkoutHost !== "checkout.stripe.com"
       ) {
-        console.error("Unexpected checkout domain:", checkoutHost, updatedCart.checkoutUrl);
+        console.error(
+          "Unexpected checkout domain:",
+          checkoutHost,
+          updatedCart.checkoutUrl,
+        );
         setError("Invalid checkout URL. Please try again.");
         return;
       }
@@ -110,7 +114,10 @@ export default function ProductCard({ badgeId }: { badgeId: string | null }) {
         <div className="relative aspect-square bg-bg-paper">
           {product.images.length > 0 && (
             <Image
-              src={product.images[selectedImage]?.original || product.images[0].original}
+              src={
+                product.images[selectedImage]?.original ||
+                product.images[0].original
+              }
               alt={product.images[selectedImage]?.alt || product.title}
               fill
               className="object-contain"
@@ -146,11 +153,10 @@ export default function ProductCard({ badgeId }: { badgeId: string | null }) {
       </div>
 
       <div className="space-y-4">
-        <h2 className="font-serif text-lg text-fg">
-          The [Redacted] T-shirt
-        </h2>
+        <h2 className="font-serif text-lg text-fg">The [Redacted] T-shirt</h2>
         <p className="text-fg-muted text-sm">
-          Wrap yourself in comfort, knowing you aren&apos;t in the Epstein Files.
+          Wrap yourself in comfort, knowing you aren&apos;t in the Epstein
+          Files.
         </p>
 
         <div className="text-2xl font-bold text-fg">${price.toFixed(2)}</div>
@@ -178,9 +184,7 @@ export default function ProductCard({ badgeId }: { badgeId: string | null }) {
           </div>
         )}
 
-        {error && (
-          <div className="text-accent text-sm">{error}</div>
-        )}
+        {error && <div className="text-accent text-sm">{error}</div>}
 
         <button
           onClick={handleCheckout}
@@ -191,7 +195,8 @@ export default function ProductCard({ badgeId }: { badgeId: string | null }) {
         </button>
 
         <p className="text-xs text-fg-muted text-center">
-          All proceeds go directly to supporting victims of trafficking and abuse.
+          All proceeds go directly to supporting victims of trafficking and
+          abuse.
         </p>
 
         {badgeId && (
