@@ -7,26 +7,26 @@
   "main": ".open-next/worker.js",
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
   },
   "observability": {
-    "enabled": true
+    "enabled": true,
   },
   "vars": {
     "OAUTH3_BASE_URL": "https://oauth3.burnt.com",
     "RECLAIM_APP_ID": "0x715DcADb8884D6D3E17898d81F82257c2733E46d",
-    "MAINTENANCE_MODE": "false"
+    "MAINTENANCE_MODE": "false",
   },
   "workers_dev": true,
   "preview_urls": true,
   "routes": [
     {
-        "pattern": "theredactedfile.com",
-        "custom_domain": true
+      "pattern": "theredactedfile.com",
+      "custom_domain": true,
     },
     {
-        "pattern": "www.theredactedfile.com",
-        "custom_domain": true
-    }
-  ]
+      "pattern": "www.theredactedfile.com",
+      "custom_domain": true,
+    },
+  ],
 }

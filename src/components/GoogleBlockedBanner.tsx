@@ -20,17 +20,18 @@ export default function GoogleBlockedBanner() {
 
         {/* Headline */}
         <h1 className="font-serif text-[36px] sm:text-[42px] text-fg text-center leading-[1.1] mb-6">
-          Google Shut<br />Us Down
+          Google Shut
+          <br />
+          Us Down
         </h1>
 
         {/* Body copy */}
         <div className="space-y-4 text-[14px] leading-[1.7] text-fg-muted text-center mb-10">
           <p>
-            Google revoked API access to an application that lets people prove they never emailed Jeffrey Epstein.
+            Google revoked API access to an application that lets people prove
+            they never emailed Jeffrey Epstein.
           </p>
-          <p>
-            Draw your own conclusions.
-          </p>
+          <p>Draw your own conclusions.</p>
         </div>
 
         {/* Redaction bar divider */}
@@ -46,7 +47,8 @@ export default function GoogleBlockedBanner() {
             Support the Mission
           </div>
           <p className="text-[14px] leading-[1.7] text-fg-muted max-w-[380px] mx-auto">
-            You don&apos;t need clearance to support victims of trafficking and abuse. The store is now open to everyone.
+            You don&apos;t need clearance to support victims of trafficking and
+            abuse. The store is now open to everyone.
           </p>
           <Link
             href="/store"
@@ -59,7 +61,8 @@ export default function GoogleBlockedBanner() {
 
       {/* Footer note */}
       <p className="text-xs text-fg-light text-center mt-6">
-        All proceeds go directly to supporting victims through the Asiyah Women&apos;s Center.
+        All proceeds go directly to supporting victims through the Asiyah
+        Women&apos;s Center.
       </p>
     </div>
   );

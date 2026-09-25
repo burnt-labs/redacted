@@ -26,7 +26,11 @@ export default function StorePage() {
   const isConnected = !!account?.bech32Address;
 
   useEffect(() => {
-    if (!queryClient || !isConnected || (!NFT_CONTRACT && !RECLAIM_NFT_CONTRACT))
+    if (
+      !queryClient ||
+      !isConnected ||
+      (!NFT_CONTRACT && !RECLAIM_NFT_CONTRACT)
+    )
       return;
 
     async function checkClearance() {
@@ -36,7 +40,7 @@ export default function StorePage() {
         if (hasBadge) {
           const { tokenIds } = await getUserBadge(
             queryClient!,
-            account!.bech32Address
+            account!.bech32Address,
           );
           if (tokenIds.length > 0) setBadgeId(tokenIds[0]);
         }
@@ -63,7 +67,8 @@ export default function StorePage() {
                 Store
               </h1>
               <p className="text-[15px] leading-[1.6] text-fg-muted max-w-[400px] mx-auto">
-                Verification is down, so the store is open to everyone.<br />
+                Verification is down, so the store is open to everyone.
+                <br />
                 Go support a worthy cause.
               </p>
             </div>
@@ -95,9 +100,7 @@ export default function StorePage() {
 
       <div className="flex-1 flex flex-col items-center px-4 py-8 sm:px-6 sm:py-16">
         <div className="text-center mb-12 space-y-4">
-          <h1 className="font-serif text-3xl md:text-4xl text-fg">
-            Store
-          </h1>
+          <h1 className="font-serif text-3xl md:text-4xl text-fg">Store</h1>
           <p className="text-fg-muted text-sm max-w-md mx-auto">
             Exclusive merchandise for cleared individuals only.
           </p>
@@ -144,10 +147,12 @@ export default function StorePage() {
         {isConnected && !loading && !cleared && (
           <div className="w-full max-w-md">
             <div className="border border-border p-4 sm:p-8 text-center space-y-6 relative">
-              <h2 className="font-serif text-2xl text-fg">Clearance Required</h2>
+              <h2 className="font-serif text-2xl text-fg">
+                Clearance Required
+              </h2>
               <p className="text-sm text-fg-muted">
-                Access to the store requires a valid clearance badge.
-                Complete the verification process to prove your inbox is clean.
+                Access to the store requires a valid clearance badge. Complete
+                the verification process to prove your inbox is clean.
               </p>
               <Link
                 href="/verify"

@@ -3,11 +3,7 @@ import { Suspense } from "react";
 import BadgeContent from "./BadgeContent";
 import Nav from "@/components/Nav";
 
-export default function BadgePage({
-  params,
-}: {
-  params: { address: string };
-}) {
+export default function BadgePage({ params }: { params: { address: string } }) {
   return (
     <main className="min-h-screen flex flex-col">
       <Nav />

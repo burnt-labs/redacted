@@ -70,17 +70,11 @@ export function middleware(request: NextRequest) {
       try {
         const originHost = new URL(origin).hostname;
         if (!isAllowedHost(originHost)) {
-          return NextResponse.json(
-            { error: "Forbidden" },
-            { status: 403 }
-          );
+          return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
       } catch {
         // Malformed Origin header — reject
-        return NextResponse.json(
-          { error: "Forbidden" },
-          { status: 403 }
-        );
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
     }
   }
@@ -106,7 +100,7 @@ export function middleware(request: NextRequest) {
   if (entry.count >= limit) {
     return NextResponse.json(
       { error: "Too many requests. Please try again later." },
-      { status: 429 }
+      { status: 429 },
     );
   }
 

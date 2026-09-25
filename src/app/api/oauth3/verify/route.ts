@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   if (!OAUTH3_BASE_URL) {
     return NextResponse.json(
       { error: "OAuth3 is not configured" },
-      { status: 503 }
+      { status: 503 },
     );
   }
 
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   if (!sid) {
     return NextResponse.json(
       { error: "Not authenticated with OAuth3. Please sign in first." },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -28,21 +28,21 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json(
       { error: "Invalid request body" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (!address) {
     return NextResponse.json(
       { error: "Missing address parameter" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (!/^xion1[a-z0-9]{38,58}$/.test(address)) {
     return NextResponse.json(
       { error: "Invalid address format" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -64,17 +64,20 @@ export async function POST(request: NextRequest) {
       console.error("CVM verification failed:", res.status);
       return NextResponse.json(
         { error: "Verification failed" },
-        { status: 502 }
+        { status: 502 },
       );
     }
 
     const data = await res.json(); // { result: "<json string>", quote: "<base64>" }
     return NextResponse.json(data);
   } catch (e) {
-    console.error("OAuth3 verify error:", e instanceof Error ? e.message : "Unknown error");
+    console.error(
+      "OAuth3 verify error:",
+      e instanceof Error ? e.message : "Unknown error",
+    );
     return NextResponse.json(
       { error: "Failed to connect to OAuth3 instance" },
-      { status: 502 }
+      { status: 502 },
     );
   }
 }

@@ -2,7 +2,11 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAbstraxionClient } from "@burnt-labs/abstraxion-react";
-import { getBadgeCount, NFT_CONTRACT, RECLAIM_NFT_CONTRACT } from "@/lib/contracts";
+import {
+  getBadgeCount,
+  NFT_CONTRACT,
+  RECLAIM_NFT_CONTRACT,
+} from "@/lib/contracts";
 import Nav from "@/components/Nav";
 
 const GOOGLE_BLOCKED = process.env.NEXT_PUBLIC_GOOGLE_BLOCKED === "true";
@@ -45,12 +49,21 @@ export default function Home() {
           The [Redacted] File
         </p>
 
-        <h1 className="font-serif font-normal leading-[0.92] tracking-[-0.02em] text-fg mb-2" style={{ fontSize: "clamp(52px, 10vw, 120px)" }}>
-          The Epstein<br />
-          <span className="inline-block bg-redact text-bg px-4 py-1 ml-2">Files</span>
+        <h1
+          className="font-serif font-normal leading-[0.92] tracking-[-0.02em] text-fg mb-2"
+          style={{ fontSize: "clamp(52px, 10vw, 120px)" }}
+        >
+          The Epstein
+          <br />
+          <span className="inline-block bg-redact text-bg px-4 py-1 ml-2">
+            Files
+          </span>
         </h1>
 
-        <p className="font-serif italic text-fg-muted mt-5 mb-10" style={{ fontSize: "clamp(18px, 2.5vw, 26px)" }}>
+        <p
+          className="font-serif italic text-fg-muted mt-5 mb-10"
+          style={{ fontSize: "clamp(18px, 2.5vw, 26px)" }}
+        >
           {GOOGLE_BLOCKED
             ? "They don\u2019t want you to prove your innocence. We wonder why."
             : "Prove you never emailed Jeffrey Epstein. Publicly. Permanently."}
@@ -59,7 +72,12 @@ export default function Home() {
         {badgeCount !== null && badgeCount >= 10000 && (
           <div className="inline-flex items-center gap-2.5 font-mono text-[12px] text-fg-muted border border-border bg-bg-paper px-[18px] py-2 mb-10">
             <span className="w-[7px] h-[7px] bg-cleared rounded-full animate-pulse-slow" />
-            <span><strong className="text-fg font-bold">{badgeCount.toLocaleString()}</strong> clearances issued</span>
+            <span>
+              <strong className="text-fg font-bold">
+                {badgeCount.toLocaleString()}
+              </strong>{" "}
+              clearances issued
+            </span>
           </div>
         )}
 
@@ -69,10 +87,12 @@ export default function Home() {
               Shut Down by Google
             </div>
             <p className="text-[15px] leading-[1.6] text-fg">
-              Google revoked API access to an app that proves you never emailed Jeffrey Epstein. Wonder why.
+              Google revoked API access to an app that proves you never emailed
+              Jeffrey Epstein. Wonder why.
             </p>
             <p className="text-[13px] leading-[1.6] text-fg-muted mt-2">
-              Verification is down, so the store is open to everyone.<br />
+              Verification is down, so the store is open to everyone.
+              <br />
               Go support a worthy cause.
             </p>
           </div>
@@ -94,7 +114,9 @@ export default function Home() {
       <section className="border-t border-border py-12 px-4 sm:px-8 overflow-hidden">
         <div className="max-w-[1100px] mx-auto relative text-center">
           <p className="font-serif italic text-[22px] leading-[1.6] text-fg-muted max-[600px]:text-[18px]">
-            &ldquo;You generate your own proof. Nothing ever leaves the secure hardware environment. No one sees anything but the result: <span className="redact-inline">cleared</span> or not.&rdquo;
+            &ldquo;You generate your own proof. Nothing ever leaves the secure
+            hardware environment. No one sees anything but the result:{" "}
+            <span className="redact-inline">cleared</span> or not.&rdquo;
           </p>
         </div>
       </section>
@@ -106,19 +128,49 @@ export default function Home() {
         </h2>
         <div className="flex max-w-[960px] mx-auto max-[900px]:flex-col max-[900px]:gap-12">
           <div className="flex-1 px-8 max-[900px]:px-0">
-            <div className="font-serif text-[64px] text-fg leading-none tracking-[-0.03em]">01</div>
-            <div className="font-mono text-[11px] font-bold tracking-[0.15em] uppercase text-fg mt-5 mb-3">Connect Your Inbox</div>
-            <p className="text-[14px] leading-[1.7] text-fg-muted">Sign in with Google. Nothing ever leaves the secure hardware environment. No one can see your emails.</p>
+            <div className="font-serif text-[64px] text-fg leading-none tracking-[-0.03em]">
+              01
+            </div>
+            <div className="font-mono text-[11px] font-bold tracking-[0.15em] uppercase text-fg mt-5 mb-3">
+              Connect Your Inbox
+            </div>
+            <p className="text-[14px] leading-[1.7] text-fg-muted">
+              Sign in with Google. Nothing ever leaves the secure hardware
+              environment. No one can see your emails.
+            </p>
           </div>
           <div className="flex-1 px-8 border-l border-border max-[900px]:border-l-0 max-[900px]:border-t max-[900px]:border-border max-[900px]:pt-12 max-[900px]:px-0">
-            <div className="font-serif text-[64px] text-fg leading-none tracking-[-0.03em]">02</div>
-            <div className="font-mono text-[11px] font-bold tracking-[0.08em] uppercase text-fg mt-5 mb-3">Prove You Aren&apos;t a Piece of Shit</div>
-            <p className="text-[14px] leading-[1.7] text-fg-muted">Your proof reveals one thing: whether Jeffrey Epstein&apos;s email ever appeared in your inbox. Nothing else. Just cleared or not.</p>
+            <div className="font-serif text-[64px] text-fg leading-none tracking-[-0.03em]">
+              02
+            </div>
+            <div className="font-mono text-[11px] font-bold tracking-[0.08em] uppercase text-fg mt-5 mb-3">
+              Prove You Aren&apos;t a Piece of Shit
+            </div>
+            <p className="text-[14px] leading-[1.7] text-fg-muted">
+              Your proof reveals one thing: whether Jeffrey Epstein&apos;s email
+              ever appeared in your inbox. Nothing else. Just cleared or not.
+            </p>
           </div>
           <div className="flex-1 px-8 border-l border-border max-[900px]:border-l-0 max-[900px]:border-t max-[900px]:border-border max-[900px]:pt-12 max-[900px]:px-0">
-            <div className="font-serif text-[64px] text-fg leading-none tracking-[-0.03em]">03</div>
-            <div className="font-mono text-[11px] font-bold tracking-[0.15em] uppercase text-fg mt-5 mb-3">Wear the Proof</div>
-            <p className="text-[14px] leading-[1.7] text-fg-muted">Cleared? Grab a tshirt that only verified people can buy. All proceeds go to the{" "}<a href="https://www.asiyahwomenscenter.org/" target="_blank" rel="noopener noreferrer" className="text-fg underline underline-offset-[3px] hover:text-accent transition-colors">Asiyah Women&apos;s Center</a>.</p>
+            <div className="font-serif text-[64px] text-fg leading-none tracking-[-0.03em]">
+              03
+            </div>
+            <div className="font-mono text-[11px] font-bold tracking-[0.15em] uppercase text-fg mt-5 mb-3">
+              Wear the Proof
+            </div>
+            <p className="text-[14px] leading-[1.7] text-fg-muted">
+              Cleared? Grab a tshirt that only verified people can buy. All
+              proceeds go to the{" "}
+              <a
+                href="https://www.asiyahwomenscenter.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-fg underline underline-offset-[3px] hover:text-accent transition-colors"
+              >
+                Asiyah Women&apos;s Center
+              </a>
+              .
+            </p>
           </div>
         </div>
       </section>
@@ -126,7 +178,9 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-border py-10 px-4 sm:px-8 text-center">
         <p className="text-[12px] leading-[1.7] text-fg-light max-w-[640px] mx-auto mb-5">
-          Your proof is generated inside an isolated secure hardware environment. No one ever accesses your emails or your password. Your clearance badge is permanent, public, and tamper proof.
+          Your proof is generated inside an isolated secure hardware
+          environment. No one ever accesses your emails or your password. Your
+          clearance badge is permanent, public, and tamper proof.
         </p>
         <div className="flex justify-center gap-6">
           <a
