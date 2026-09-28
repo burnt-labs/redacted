@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+.next/
+.open-next/
+.wrangler/
+coverage/
+contracts/
+public/

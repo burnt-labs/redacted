@@ -51,12 +51,14 @@ module.exports = function (source) {
   // 2. Replace decodeAuthorization calls with decodeRestFormatAuthorization
   patched = patched.replace(
     /decodeAuthorization\(\s*grantResponse\.authorization\.typeUrl,\s*grantResponse\.authorization\.value\s*\)/g,
-    "decodeRestFormatAuthorization(grantResponse.authorization)"
+    "decodeRestFormatAuthorization(grantResponse.authorization)",
   );
 
   // 3. Patch getAccount for new accounts
-  const getAccountCJS = /async getAccount\(searchAddress\) \{\s*const account = await this\.forceGetQueryClient\(\)\.auth\.account\(searchAddress\);\s*if \(!account\) \{\s*return null;\s*\}\s*return signers\.customAccountFromAny\(account\);\s*\}/;
-  const getAccountESM = /async getAccount\(searchAddress\) \{\s*const account = await this\.forceGetQueryClient\(\)\.auth\.account\(searchAddress\);\s*if \(!account\) \{\s*return null;\s*\}\s*return customAccountFromAny\(account\);\s*\}/;
+  const getAccountCJS =
+    /async getAccount\(searchAddress\) \{\s*const account = await this\.forceGetQueryClient\(\)\.auth\.account\(searchAddress\);\s*if \(!account\) \{\s*return null;\s*\}\s*return signers\.customAccountFromAny\(account\);\s*\}/;
+  const getAccountESM =
+    /async getAccount\(searchAddress\) \{\s*const account = await this\.forceGetQueryClient\(\)\.auth\.account\(searchAddress\);\s*if \(!account\) \{\s*return null;\s*\}\s*return customAccountFromAny\(account\);\s*\}/;
 
   const makeNewGetAccount = (fnName) => `async getAccount(searchAddress) {
     try {
@@ -77,13 +79,21 @@ module.exports = function (source) {
   }`;
 
   if (getAccountCJS.test(patched)) {
-    patched = patched.replace(getAccountCJS, makeNewGetAccount("signers.customAccountFromAny"));
+    patched = patched.replace(
+      getAccountCJS,
+      makeNewGetAccount("signers.customAccountFromAny"),
+    );
   } else if (getAccountESM.test(patched)) {
-    patched = patched.replace(getAccountESM, makeNewGetAccount("customAccountFromAny"));
+    patched = patched.replace(
+      getAccountESM,
+      makeNewGetAccount("customAccountFromAny"),
+    );
   }
 
   if (patched !== source) {
-    console.log("  [abstraxion-patch-loader] Patched abstraxion-core at compile time");
+    console.log(
+      "  [abstraxion-patch-loader] Patched abstraxion-core at compile time",
+    );
   }
 
   return patched;

@@ -32,12 +32,16 @@ export default function GalleryPage() {
         const entries: BadgeEntry[] = await Promise.all(
           badgeResults.map(async ({ tokenId, nftContract, source }) => {
             try {
-              const info = await getBadgeInfo(queryClient!, tokenId, nftContract);
+              const info = await getBadgeInfo(
+                queryClient!,
+                tokenId,
+                nftContract,
+              );
               const dateAttr = info.extension?.attributes?.find(
-                (a) => a.trait_type === "date" || a.trait_type === "cleared_at"
+                (a) => a.trait_type === "date" || a.trait_type === "cleared_at",
               );
               const ownerAttr = info.extension?.attributes?.find(
-                (a) => a.trait_type === "owner" || a.trait_type === "address"
+                (a) => a.trait_type === "owner" || a.trait_type === "address",
               );
               return {
                 tokenId,
@@ -48,7 +52,7 @@ export default function GalleryPage() {
             } catch {
               return { tokenId, source };
             }
-          })
+          }),
         );
         setBadges(entries);
       } catch (e) {
