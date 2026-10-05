@@ -1,7 +1,9 @@
 const API_BASE = "https://apiv3.droplinked.com";
 
-export const PRODUCT_ID = process.env.NEXT_PUBLIC_DROPLINKED_PRODUCT_ID || "69a08e00b7618f1bcaeaf335";
-export const SHOP_ID = process.env.NEXT_PUBLIC_DROPLINKED_SHOP_ID || "69a083eab7618f1bcaeaf330";
+export const PRODUCT_ID =
+  process.env.NEXT_PUBLIC_DROPLINKED_PRODUCT_ID || "69a08e00b7618f1bcaeaf335";
+export const SHOP_ID =
+  process.env.NEXT_PUBLIC_DROPLINKED_SHOP_ID || "69a083eab7618f1bcaeaf330";
 
 // ── Types ──
 
@@ -64,7 +66,9 @@ export interface Cart {
 
 // ── API Functions ──
 
-export async function getProduct(productId: string = PRODUCT_ID): Promise<Product> {
+export async function getProduct(
+  productId: string = PRODUCT_ID,
+): Promise<Product> {
   const res = await fetch(`${API_BASE}/product-v2/public/${productId}`);
   if (!res.ok) throw new Error(`Failed to fetch product: ${res.status}`);
   const json = await res.json();
@@ -82,7 +86,11 @@ export async function createCart(returnUrl?: string): Promise<Cart> {
   return json.data;
 }
 
-export async function addToCart(cartId: string, skuId: string, quantity: number = 1): Promise<Cart> {
+export async function addToCart(
+  cartId: string,
+  skuId: string,
+  quantity: number = 1,
+): Promise<Cart> {
   const res = await fetch(`${API_BASE}/v2/carts/${cartId}/products`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -96,12 +104,14 @@ export async function addToCart(cartId: string, skuId: string, quantity: number 
 /** Find the SKU matching a set of selected attributes (e.g. { Color: "Black", Size: "M" }) */
 export function findSKU(
   skus: ProductSKU[],
-  selections: Record<string, string>
+  selections: Record<string, string>,
 ): ProductSKU | undefined {
   return skus.find((sku) =>
     Object.entries(selections).every(([key, caption]) =>
-      sku.attributes.some((attr) => attr.key === key && attr.caption === caption)
-    )
+      sku.attributes.some(
+        (attr) => attr.key === key && attr.caption === caption,
+      ),
+    ),
   );
 }
 

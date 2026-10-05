@@ -4,7 +4,10 @@
 
 /* ========== BASE ========== */
 body {
-  font-family: "Inter", -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    sans-serif;
   background: #f5f0e8;
   color: #111111;
   min-height: 100vh;
@@ -38,8 +41,12 @@ body::before {
 
 /* ========== LOADING BAR ========== */
 @keyframes loadSlide {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(350%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
 }
 
 .loading-bar {
@@ -60,8 +67,13 @@ body::before {
 
 /* ========== PULSE ANIMATION ========== */
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 /* ========== RECLAIM IFRAME OVERLAY ========== */
@@ -73,7 +85,8 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 .reclaim-iframe-close {
   position: absolute;

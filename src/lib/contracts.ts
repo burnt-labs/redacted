@@ -1,6 +1,9 @@
 // Duck-typed interfaces to avoid version mismatches between @cosmjs packages
 interface QueryClient {
-  queryContractSmart(address: string, queryMsg: Record<string, unknown>): Promise<any>;
+  queryContractSmart(
+    address: string,
+    queryMsg: Record<string, unknown>,
+  ): Promise<any>;
 }
 
 interface SigningClient extends QueryClient {
@@ -12,7 +15,9 @@ interface SigningClient extends QueryClient {
   ): Promise<{ transactionHash: string }>;
 }
 
-export function isContractSigningClient(client: unknown): client is SigningClient {
+export function isContractSigningClient(
+  client: unknown,
+): client is SigningClient {
   if (!client || typeof client !== "object") return false;
   const candidate = client as Partial<SigningClient>;
   return (
@@ -22,26 +27,36 @@ export function isContractSigningClient(client: unknown): client is SigningClien
 }
 
 // Contract addresses from env
-export const CLEARANCE_CONTRACT = process.env.NEXT_PUBLIC_CLEARANCE_CONTRACT || "";
+export const CLEARANCE_CONTRACT =
+  process.env.NEXT_PUBLIC_CLEARANCE_CONTRACT || "";
 export const NFT_CONTRACT = process.env.NEXT_PUBLIC_NFT_CONTRACT || "";
-export const RECLAIM_CLEARANCE_CONTRACT = process.env.NEXT_PUBLIC_RECLAIM_CLEARANCE_CONTRACT || "";
-export const RECLAIM_NFT_CONTRACT = process.env.NEXT_PUBLIC_RECLAIM_NFT_CONTRACT || "";
+export const RECLAIM_CLEARANCE_CONTRACT =
+  process.env.NEXT_PUBLIC_RECLAIM_CLEARANCE_CONTRACT || "";
+export const RECLAIM_NFT_CONTRACT =
+  process.env.NEXT_PUBLIC_RECLAIM_NFT_CONTRACT || "";
 
 // Deduplicated NFT contracts — both env vars may point to the same address
-const uniqueNftContracts = Array.from(new Set([NFT_CONTRACT, RECLAIM_NFT_CONTRACT].filter(Boolean)));
+const uniqueNftContracts = Array.from(
+  new Set([NFT_CONTRACT, RECLAIM_NFT_CONTRACT].filter(Boolean)),
+);
 
 // ── Query functions ──
 
 export async function getBadgeCount(queryClient: QueryClient): Promise<number> {
   let total = 0;
   for (const contract of uniqueNftContracts) {
-    const res = await queryClient.queryContractSmart(contract, { num_tokens: {} });
+    const res = await queryClient.queryContractSmart(contract, {
+      num_tokens: {},
+    });
     total += res.count ?? 0;
   }
   return total;
 }
 
-export async function isCleared(queryClient: QueryClient, address: string): Promise<boolean> {
+export async function isCleared(
+  queryClient: QueryClient,
+  address: string,
+): Promise<boolean> {
   for (const contract of uniqueNftContracts) {
     const res = await queryClient.queryContractSmart(contract, {
       tokens: { owner: address, limit: 1 },
@@ -53,7 +68,7 @@ export async function isCleared(queryClient: QueryClient, address: string): Prom
 
 export async function getUserBadge(
   queryClient: QueryClient,
-  address: string
+  address: string,
 ): Promise<{ tokenIds: string[]; source: "oauth3" | "reclaim" | null }> {
   // Check each unique NFT contract
   for (const contract of uniqueNftContracts) {
@@ -65,7 +80,10 @@ export async function getUserBadge(
       let source: "oauth3" | "reclaim" | null = null;
       if (contract === RECLAIM_NFT_CONTRACT && contract !== NFT_CONTRACT) {
         source = "reclaim";
-      } else if (contract === NFT_CONTRACT && contract !== RECLAIM_NFT_CONTRACT) {
+      } else if (
+        contract === NFT_CONTRACT &&
+        contract !== RECLAIM_NFT_CONTRACT
+      ) {
         source = "oauth3";
       }
       return { tokenIds: res.tokens, source };
@@ -77,17 +95,31 @@ export async function getUserBadge(
 export async function getBadgeInfo(
   queryClient: QueryClient,
   tokenId: string,
-  nftContract: string
-): Promise<{ extension?: { name?: string; description?: string; attributes?: Array<{ trait_type: string; value: string }> } }> {
+  nftContract: string,
+): Promise<{
+  extension?: {
+    name?: string;
+    description?: string;
+    attributes?: Array<{ trait_type: string; value: string }>;
+  };
+}> {
   return queryClient.queryContractSmart(nftContract, {
     nft_info: { token_id: tokenId },
   });
 }
 
-export async function getAllBadges(
-  queryClient: QueryClient
-): Promise<Array<{ tokenId: string; nftContract: string; source: "oauth3" | "reclaim" | null }>> {
-  const results: Array<{ tokenId: string; nftContract: string; source: "oauth3" | "reclaim" | null }> = [];
+export async function getAllBadges(queryClient: QueryClient): Promise<
+  Array<{
+    tokenId: string;
+    nftContract: string;
+    source: "oauth3" | "reclaim" | null;
+  }>
+> {
+  const results: Array<{
+    tokenId: string;
+    nftContract: string;
+    source: "oauth3" | "reclaim" | null;
+  }> = [];
 
   for (const contract of uniqueNftContracts) {
     let startAfter: string | undefined;
@@ -127,13 +159,13 @@ export async function submitProof(
   client: SigningClient,
   sender: string,
   result: string,
-  quote: string
+  quote: string,
 ) {
   return client.execute(
     sender,
     CLEARANCE_CONTRACT,
     { submit_proof: { result, quote } },
-    "auto"
+    "auto",
   );
 }
 
@@ -151,7 +183,7 @@ export async function submitReclaimProof(
       timestampS: string;
     };
     signatures: string[];
-  }
+  },
 ) {
   const tokenId = `reclaim-${proof.claimData.identifier}`;
   return client.execute(
@@ -184,6 +216,6 @@ export async function submitReclaimProof(
         },
       },
     },
-    "auto"
+    "auto",
   );
 }

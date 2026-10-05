@@ -2,7 +2,10 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { useAbstraxionClient, useAbstraxionAccount } from "@burnt-labs/abstraxion-react";
+import {
+  useAbstraxionClient,
+  useAbstraxionAccount,
+} from "@burnt-labs/abstraxion-react";
 import {
   getUserBadge,
   getBadgeInfo,
@@ -11,13 +14,21 @@ import {
 } from "@/lib/contracts";
 import ProductCard from "@/components/ProductCard";
 
-const EXPLORER_TX_URL = process.env.NEXT_PUBLIC_EXPLORER_TX_URL || "https://www.mintscan.io/xion-testnet/tx";
-const REST_URL = process.env.NEXT_PUBLIC_REST_URL || "https://api.xion-testnet-2.burnt.com";
+const EXPLORER_TX_URL =
+  process.env.NEXT_PUBLIC_EXPLORER_TX_URL ||
+  "https://www.mintscan.io/xion-testnet/tx";
+const REST_URL =
+  process.env.NEXT_PUBLIC_REST_URL || "https://api.xion-testnet-2.burnt.com";
 
-async function fetchMintTxHash(address: string, source: "oauth3" | "reclaim" | null): Promise<string | null> {
+async function fetchMintTxHash(
+  address: string,
+  source: "oauth3" | "reclaim" | null,
+): Promise<string | null> {
   const action = source === "reclaim" ? "mint_verified" : "submit_proof";
   try {
-    const query = encodeURIComponent(`wasm.action='${action}' AND wasm.recipient='${address}'`);
+    const query = encodeURIComponent(
+      `wasm.action='${action}' AND wasm.recipient='${address}'`,
+    );
     const url = `${REST_URL}/cosmos/tx/v1beta1/txs?query=${query}&order_by=ORDER_BY_DESC&pagination.limit=1`;
     const res = await fetch(url);
     if (!res.ok) return null;
@@ -135,7 +146,10 @@ export default function BadgeContent({ address }: { address: string }) {
           Get Cleared
         </Link>
         <button
-          onClick={() => { logout(); window.location.href = "/verify"; }}
+          onClick={() => {
+            logout();
+            window.location.href = "/verify";
+          }}
           className="block mx-auto mt-4 font-mono text-[11px] tracking-[0.1em] uppercase text-fg-muted bg-transparent border-none cursor-pointer underline underline-offset-[3px] hover:text-fg transition-colors"
         >
           Wrong account? Log out
@@ -151,7 +165,10 @@ export default function BadgeContent({ address }: { address: string }) {
       {/* Certificate */}
       <div className="border-[1.5px] border-border-dark p-12 relative bg-bg max-[600px]:p-6 max-[600px]:px-6">
         {/* Corner accents */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          aria-hidden="true"
+        >
           {/* Top-left */}
           <div className="absolute top-2 left-2 w-5 h-5 border-t-[1.5px] border-l-[1.5px] border-fg" />
           {/* Top-right */}
@@ -184,7 +201,17 @@ export default function BadgeContent({ address }: { address: string }) {
             Support Victims
           </div>
           <p className="text-[14px] leading-[1.65] text-fg-muted max-w-[360px] mx-auto mb-5">
-            Grab a tee reserved for people who aren&apos;t on the list. All proceeds go to the{" "}<a href="https://www.asiyahwomenscenter.org/" target="_blank" rel="noopener noreferrer" className="text-fg underline underline-offset-[3px] hover:text-accent transition-colors">Asiyah Center</a>, a women&apos;s shelter for domestic and sexual violence survivors.
+            Grab a tee reserved for people who aren&apos;t on the list. All
+            proceeds go to the{" "}
+            <a
+              href="https://www.asiyahwomenscenter.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-fg underline underline-offset-[3px] hover:text-accent transition-colors"
+            >
+              Asiyah Center
+            </a>
+            , a women&apos;s shelter for domestic and sexual violence survivors.
           </p>
           <div className="flex justify-center">
             <ProductCard badgeId={badge.tokenId} />
@@ -195,7 +222,8 @@ export default function BadgeContent({ address }: { address: string }) {
       {/* Share section */}
       <div className="mt-8 border border-border p-6 text-center space-y-4">
         <p className="text-[14px] leading-[1.7] text-fg-muted">
-          The more people who prove they&apos;re clean, the more conspicuous the ones who don&apos;t.
+          The more people who prove they&apos;re clean, the more conspicuous the
+          ones who don&apos;t.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-3">
           <button
@@ -243,24 +271,43 @@ export default function BadgeContent({ address }: { address: string }) {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M3 4.5L6 7.5L9 4.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
         {detailsOpen && (
           <div className="flex flex-col gap-4 px-6 pb-6">
             <div className="flex justify-between items-baseline max-[600px]:flex-col max-[600px]:gap-0.5">
-              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg-light">Status</span>
-              <span className="font-mono text-[12px] tracking-[0.05em] text-cleared font-bold">Cleared</span>
+              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg-light">
+                Status
+              </span>
+              <span className="font-mono text-[12px] tracking-[0.05em] text-cleared font-bold">
+                Cleared
+              </span>
             </div>
             <div className="flex justify-between items-baseline max-[600px]:flex-col max-[600px]:gap-0.5">
-              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg-light">Method</span>
-              <span className="font-mono text-[12px] tracking-[0.05em] text-fg">{methodLabel}</span>
+              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg-light">
+                Method
+              </span>
+              <span className="font-mono text-[12px] tracking-[0.05em] text-fg">
+                {methodLabel}
+              </span>
             </div>
             <div className="flex justify-between items-baseline max-[600px]:flex-col max-[600px]:gap-0.5">
-              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg-light">Record</span>
+              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg-light">
+                Record
+              </span>
               <span className="font-mono text-[12px] tracking-[0.05em]">
                 <a
-                  href={explorerUrl || `https://www.mintscan.io/xion-testnet/address/${NFT_CONTRACT}`}
+                  href={
+                    explorerUrl ||
+                    `https://www.mintscan.io/xion-testnet/address/${NFT_CONTRACT}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-cleared underline underline-offset-[3px] hover:text-fg transition-colors"
@@ -270,8 +317,12 @@ export default function BadgeContent({ address }: { address: string }) {
               </span>
             </div>
             <div className="flex justify-between items-baseline max-[600px]:flex-col max-[600px]:gap-0.5">
-              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg-light">Subject</span>
-              <span className="font-mono text-[12px] tracking-[0.05em] bg-redact text-bg px-1.5 py-0.5 select-none">Redacted</span>
+              <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg-light">
+                Subject
+              </span>
+              <span className="font-mono text-[12px] tracking-[0.05em] bg-redact text-bg px-1.5 py-0.5 select-none">
+                Redacted
+              </span>
             </div>
           </div>
         )}

@@ -43,7 +43,10 @@ const ENABLE_OAUTH3 = process.env.NEXT_PUBLIC_ENABLE_OAUTH3 === "true";
 
 function isMobileDevice(): boolean {
   if (typeof window === "undefined") return false;
-  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+  return (
+    /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+    window.innerWidth < 768
+  );
 }
 
 function getStepStates(step: VerifyStep, isConnected: boolean) {
@@ -51,7 +54,8 @@ function getStepStates(step: VerifyStep, isConnected: boolean) {
   if (step === "success") return ["done", "done", "done"] as const;
   if (step === "submitting") return ["done", "done", "active"] as const;
   if (step === "verifying") return ["done", "active", "inactive"] as const;
-  if (step === "redirecting" || step === "proving") return ["done", "active", "inactive"] as const;
+  if (step === "redirecting" || step === "proving")
+    return ["done", "active", "inactive"] as const;
   if (step === "choosing") return ["done", "active", "inactive"] as const;
   if (step === "connecting") return ["active", "inactive", "inactive"] as const;
   if (step === "error") return ["done", "active", "inactive"] as const;
@@ -75,19 +79,48 @@ function WalkthroughSteps() {
         <div className="w-full border border-border rounded-lg overflow-hidden bg-white shadow-sm">
           <div className="px-4 pt-5 pb-4 text-left">
             {/* Google logo */}
-            <svg className="mb-3" width="52" height="18" viewBox="0 0 272 92" fill="none">
-              <path d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#EA4335"/>
-              <path d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#FBBC05"/>
-              <path d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z" fill="#4285F4"/>
-              <path d="M225 3v65h-9.5V3h9.5z" fill="#34A853"/>
-              <path d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.96 0-11.84 4.37-11.59 12.93z" fill="#EA4335"/>
-              <path d="M35.29 41.19V32H68c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 33.91S16.32-1.54 36.3-1.54c11.01 0 18.82 4.21 24.69 9.83l-6.95 6.95c-4.21-3.94-9.91-7.03-17.74-7.03-14.49 0-25.82 11.68-25.82 25.69 0 14.02 11.33 25.69 25.82 25.69 9.41 0 14.78-3.78 18.23-7.22 2.79-2.79 4.62-6.79 5.34-12.24H35.29z" fill="#4285F4"/>
+            <svg
+              className="mb-3"
+              width="52"
+              height="18"
+              viewBox="0 0 272 92"
+              fill="none"
+            >
+              <path
+                d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"
+                fill="#EA4335"
+              />
+              <path
+                d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z"
+                fill="#4285F4"
+              />
+              <path d="M225 3v65h-9.5V3h9.5z" fill="#34A853" />
+              <path
+                d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.96 0-11.84 4.37-11.59 12.93z"
+                fill="#EA4335"
+              />
+              <path
+                d="M35.29 41.19V32H68c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 33.91S16.32-1.54 36.3-1.54c11.01 0 18.82 4.21 24.69 9.83l-6.95 6.95c-4.21-3.94-9.91-7.03-17.74-7.03-14.49 0-25.82 11.68-25.82 25.69 0 14.02 11.33 25.69 25.82 25.69 9.41 0 14.78-3.78 18.23-7.22 2.79-2.79 4.62-6.79 5.34-12.24H35.29z"
+                fill="#4285F4"
+              />
             </svg>
-            <div className="text-[11px] font-medium text-[#202124] mb-1.5 leading-snug">Google hasn&apos;t verified this app</div>
-            <div className="text-[8px] text-[#5f6368] leading-relaxed mb-3">The app is requesting access to your Google Account. For your safety, don&apos;t continue until the developer has been verified by Google.</div>
+            <div className="text-[11px] font-medium text-[#202124] mb-1.5 leading-snug">
+              Google hasn&apos;t verified this app
+            </div>
+            <div className="text-[8px] text-[#5f6368] leading-relaxed mb-3">
+              The app is requesting access to your Google Account. For your
+              safety, don&apos;t continue until the developer has been verified
+              by Google.
+            </div>
             {/* Back to safety button */}
             <div className="flex justify-start mb-3">
-              <div className="bg-[#1a73e8] text-white text-[8px] font-medium px-3 py-1 rounded-sm">Back to safety</div>
+              <div className="bg-[#1a73e8] text-white text-[8px] font-medium px-3 py-1 rounded-sm">
+                Back to safety
+              </div>
             </div>
             {/* Advanced link with annotation */}
             <div className="relative inline-block">
@@ -96,7 +129,9 @@ function WalkthroughSteps() {
             </div>
           </div>
         </div>
-        <div className="text-[10px] text-fg-muted mt-2.5 font-mono tracking-[0.08em] uppercase">1. Click &quot;Advanced&quot;</div>
+        <div className="text-[10px] text-fg-muted mt-2.5 font-mono tracking-[0.08em] uppercase">
+          1. Click &quot;Advanced&quot;
+        </div>
       </div>
 
       {/* Step 2: Click Go to... */}
@@ -104,24 +139,54 @@ function WalkthroughSteps() {
         <div className="w-full border border-border rounded-lg overflow-hidden bg-white shadow-sm">
           <div className="px-4 pt-5 pb-4 text-left">
             {/* Google logo */}
-            <svg className="mb-3" width="52" height="18" viewBox="0 0 272 92" fill="none">
-              <path d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#EA4335"/>
-              <path d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#FBBC05"/>
-              <path d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z" fill="#4285F4"/>
-              <path d="M225 3v65h-9.5V3h9.5z" fill="#34A853"/>
-              <path d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.96 0-11.84 4.37-11.59 12.93z" fill="#EA4335"/>
-              <path d="M35.29 41.19V32H68c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 33.91S16.32-1.54 36.3-1.54c11.01 0 18.82 4.21 24.69 9.83l-6.95 6.95c-4.21-3.94-9.91-7.03-17.74-7.03-14.49 0-25.82 11.68-25.82 25.69 0 14.02 11.33 25.69 25.82 25.69 9.41 0 14.78-3.78 18.23-7.22 2.79-2.79 4.62-6.79 5.34-12.24H35.29z" fill="#4285F4"/>
+            <svg
+              className="mb-3"
+              width="52"
+              height="18"
+              viewBox="0 0 272 92"
+              fill="none"
+            >
+              <path
+                d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"
+                fill="#EA4335"
+              />
+              <path
+                d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z"
+                fill="#4285F4"
+              />
+              <path d="M225 3v65h-9.5V3h9.5z" fill="#34A853" />
+              <path
+                d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.96 0-11.84 4.37-11.59 12.93z"
+                fill="#EA4335"
+              />
+              <path
+                d="M35.29 41.19V32H68c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 33.91S16.32-1.54 36.3-1.54c11.01 0 18.82 4.21 24.69 9.83l-6.95 6.95c-4.21-3.94-9.91-7.03-17.74-7.03-14.49 0-25.82 11.68-25.82 25.69 0 14.02 11.33 25.69 25.82 25.69 9.41 0 14.78-3.78 18.23-7.22 2.79-2.79 4.62-6.79 5.34-12.24H35.29z"
+                fill="#4285F4"
+              />
             </svg>
-            <div className="text-[11px] font-medium text-[#202124] mb-1.5 leading-snug">Google hasn&apos;t verified this app</div>
-            <div className="text-[8px] text-[#5f6368] leading-relaxed mb-3">This app isn&apos;t verified by Google yet. Only proceed if you know and trust the developer.</div>
+            <div className="text-[11px] font-medium text-[#202124] mb-1.5 leading-snug">
+              Google hasn&apos;t verified this app
+            </div>
+            <div className="text-[8px] text-[#5f6368] leading-relaxed mb-3">
+              This app isn&apos;t verified by Google yet. Only proceed if you
+              know and trust the developer.
+            </div>
             {/* Go to link with annotation */}
             <div className="relative inline-block">
-              <span className="text-[8px] text-[#5f6368]">Go to theredactedfile.com (unsafe)</span>
+              <span className="text-[8px] text-[#5f6368]">
+                Go to theredactedfile.com (unsafe)
+              </span>
               <div className="absolute -inset-x-1.5 -inset-y-1 border-[1.5px] border-accent rounded-full pointer-events-none" />
             </div>
           </div>
         </div>
-        <div className="text-[10px] text-fg-muted mt-2.5 font-mono tracking-[0.08em] uppercase">2. Click &quot;Go to...&quot;</div>
+        <div className="text-[10px] text-fg-muted mt-2.5 font-mono tracking-[0.08em] uppercase">
+          2. Click &quot;Go to...&quot;
+        </div>
       </div>
     </div>
   );
@@ -174,7 +239,7 @@ export default function VerifyFlow() {
   useEffect(() => {
     if (!showInterstitial || !interstitialRef.current) return;
     const focusable = interstitialRef.current.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled])'
+      "a[href], button:not([disabled])",
     );
     if (focusable.length > 0) focusable[0].focus();
 
@@ -198,19 +263,20 @@ export default function VerifyFlow() {
     return () => window.removeEventListener("keydown", handler);
   }, [showInterstitial]);
 
-
   // Check if user already has a badge on mount
   useEffect(() => {
     if (!isConnected || !queryClient) return;
-    isCleared(queryClient, account.bech32Address).then((cleared) => {
-      if (cleared) {
-        setAlreadyCleared(true);
-        setStep("success");
-        setTimeout(() => {
-          router.push(`/badge/${account.bech32Address}`);
-        }, 1500);
-      }
-    }).catch(() => {});
+    isCleared(queryClient, account.bech32Address)
+      .then((cleared) => {
+        if (cleared) {
+          setAlreadyCleared(true);
+          setStep("success");
+          setTimeout(() => {
+            router.push(`/badge/${account.bech32Address}`);
+          }, 1500);
+        }
+      })
+      .catch(() => {});
   }, [isConnected, queryClient, account?.bech32Address, router]);
 
   // Listen for postMessage from the OAuth3 popup
@@ -283,7 +349,7 @@ export default function VerifyFlow() {
     const popup = window.open(
       "/api/oauth3/login",
       "oauth3-login",
-      `width=${w},height=${h},left=${left},top=${top},popup=yes`
+      `width=${w},height=${h},left=${left},top=${top},popup=yes`,
     );
     // Clear interval from message handler to avoid race with popup close detection
     const interval = setInterval(() => {
@@ -312,7 +378,7 @@ export default function VerifyFlow() {
       if (!verifyRes.ok) {
         const data = await verifyRes.json().catch(() => ({}));
         throw new Error(
-          data.error || `Verification failed (${verifyRes.status})`
+          data.error || `Verification failed (${verifyRes.status})`,
         );
       }
 
@@ -320,12 +386,12 @@ export default function VerifyFlow() {
       const parsed = JSON.parse(result);
 
       setAttestationData(
-        `Searched for: ${parsed.suspect}\nMessages found: ${parsed.message_count}\nResult: ${parsed.clean ? "CLEAN" : "COMPROMISED"}`
+        `Searched for: ${parsed.suspect}\nMessages found: ${parsed.message_count}\nResult: ${parsed.clean ? "CLEAN" : "COMPROMISED"}`,
       );
 
       if (!parsed.clean) {
         throw new Error(
-          `CLEARANCE DENIED — ${parsed.message_count} email(s) from ${parsed.suspect} found in your inbox.`
+          `CLEARANCE DENIED — ${parsed.message_count} email(s) from ${parsed.suspect} found in your inbox.`,
         );
       }
 
@@ -338,7 +404,7 @@ export default function VerifyFlow() {
         client,
         account.bech32Address,
         result,
-        quote
+        quote,
       );
       setStep("success");
 
@@ -393,7 +459,7 @@ export default function VerifyFlow() {
         const txResult = await submitReclaimProof(
           client,
           account.bech32Address,
-          proof
+          proof,
         );
         setStep("success");
 
@@ -422,7 +488,7 @@ export default function VerifyFlow() {
         setStep("error");
       }
     },
-    [client, account]
+    [client, account],
   );
 
   const handleStartReclaim = useCallback(async () => {
@@ -445,7 +511,8 @@ export default function VerifyFlow() {
 
       // Reconstruct session from server-serialized state (secret is stripped)
       const { ReclaimProofRequest } = await import("@reclaimprotocol/js-sdk");
-      const proofRequest = await ReclaimProofRequest.fromJsonString(reclaimJson);
+      const proofRequest =
+        await ReclaimProofRequest.fromJsonString(reclaimJson);
 
       await proofRequest.startSession({
         onSuccess: (receivedProofs: unknown) => {
@@ -453,7 +520,10 @@ export default function VerifyFlow() {
             ? receivedProofs
             : [receivedProofs];
           if (proofsArray.length > 0 && typeof proofsArray[0] !== "string") {
-            handleSubmitReclaimProof(proofsArray[0] as unknown as ReclaimProof, sessionId);
+            handleSubmitReclaimProof(
+              proofsArray[0] as unknown as ReclaimProof,
+              sessionId,
+            );
           } else {
             if (sessionId !== reclaimSessionId.current) return;
             setError("Received invalid proof data.");
@@ -555,23 +625,33 @@ export default function VerifyFlow() {
             className="relative bg-bg border-[1.5px] border-border-dark p-10 max-w-[520px] w-full max-[600px]:p-5 max-[600px]:mx-3 max-[600px]:my-auto"
           >
             {/* Corner accents */}
-            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div
+              className="absolute inset-0 pointer-events-none"
+              aria-hidden="true"
+            >
               <div className="absolute top-2 left-2 w-5 h-5 border-t-[1.5px] border-l-[1.5px] border-fg" />
               <div className="absolute top-2 right-2 w-5 h-5 border-t-[1.5px] border-r-[1.5px] border-fg" />
               <div className="absolute bottom-2 left-2 w-5 h-5 border-b-[1.5px] border-l-[1.5px] border-fg" />
               <div className="absolute bottom-2 right-2 w-5 h-5 border-b-[1.5px] border-r-[1.5px] border-fg" />
             </div>
 
-            <h2 id="interstitial-heading" className="font-serif text-[28px] text-fg mb-5 max-[600px]:text-[22px] max-[600px]:mb-3">
+            <h2
+              id="interstitial-heading"
+              className="font-serif text-[28px] text-fg mb-5 max-[600px]:text-[22px] max-[600px]:mb-3"
+            >
               Before you continue
             </h2>
 
             <p className="text-[14px] leading-[1.65] text-fg-muted mb-4 max-[600px]:text-[13px] max-[600px]:mb-3">
-              Google&apos;s going to tell you this app isn&apos;t verified. Don&apos;t worry, your proof is generated inside fully isolated secure hardware. No one ever accesses anything, including your emails or your password.
+              Google&apos;s going to tell you this app isn&apos;t verified.
+              Don&apos;t worry, your proof is generated inside fully isolated
+              secure hardware. No one ever accesses anything, including your
+              emails or your password.
             </p>
 
             <p className="text-[14px] leading-[1.65] text-fg-muted mb-5 max-[600px]:text-[13px] max-[600px]:mb-3">
-              Their API team hasn&apos;t approved this app yet. We have a theory about why.
+              Their API team hasn&apos;t approved this app yet. We have a theory
+              about why.
             </p>
 
             <a
@@ -616,11 +696,21 @@ export default function VerifyFlow() {
       <div className="w-full">
         {/* Progress bar */}
         <div className="flex items-center gap-0 mb-12">
-          <div className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors duration-400 ${dots[0] ? "bg-cleared" : "bg-border"}`} />
-          <div className={`flex-1 h-[2px] transition-colors duration-400 ${segs[0] ? "bg-cleared" : "bg-border"}`} />
-          <div className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors duration-400 ${dots[1] ? "bg-cleared" : "bg-border"}`} />
-          <div className={`flex-1 h-[2px] transition-colors duration-400 ${segs[1] ? "bg-cleared" : "bg-border"}`} />
-          <div className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors duration-400 ${dots[2] ? "bg-cleared" : "bg-border"}`} />
+          <div
+            className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors duration-400 ${dots[0] ? "bg-cleared" : "bg-border"}`}
+          />
+          <div
+            className={`flex-1 h-[2px] transition-colors duration-400 ${segs[0] ? "bg-cleared" : "bg-border"}`}
+          />
+          <div
+            className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors duration-400 ${dots[1] ? "bg-cleared" : "bg-border"}`}
+          />
+          <div
+            className={`flex-1 h-[2px] transition-colors duration-400 ${segs[1] ? "bg-cleared" : "bg-border"}`}
+          />
+          <div
+            className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors duration-400 ${dots[2] ? "bg-cleared" : "bg-border"}`}
+          />
         </div>
 
         {/* Vertical stepper */}
@@ -628,20 +718,38 @@ export default function VerifyFlow() {
           {/* Step 1: Create Account */}
           <div className="relative pl-16 py-4 max-[600px]:pl-[52px] max-[600px]:py-3">
             {/* Circle */}
-            <div className={`absolute left-0 top-4 w-10 h-10 flex items-center justify-center font-serif text-[18px] border-[1.5px] rounded-full transition-all duration-300 max-[600px]:w-[34px] max-[600px]:h-[34px] max-[600px]:text-[15px] max-[600px]:top-3 ${circleClass(stepStates[0])}`}>
+            <div
+              className={`absolute left-0 top-4 w-10 h-10 flex items-center justify-center font-serif text-[18px] border-[1.5px] rounded-full transition-all duration-300 max-[600px]:w-[34px] max-[600px]:h-[34px] max-[600px]:text-[15px] max-[600px]:top-3 ${circleClass(stepStates[0])}`}
+            >
               {stepStates[0] === "done" ? (
-                <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className="w-4 h-4"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M3 8.5L6.5 12L13 4" />
                 </svg>
-              ) : "01"}
+              ) : (
+                "01"
+              )}
             </div>
             {/* Connecting line */}
-            <div className={`absolute left-[19px] top-14 bottom-[-16px] w-[1.5px] transition-colors duration-300 max-[600px]:left-4 max-[600px]:top-12 max-[600px]:bottom-[-12px] ${stepStates[0] === "done" ? "bg-cleared" : "bg-border"}`} />
+            <div
+              className={`absolute left-[19px] top-14 bottom-[-16px] w-[1.5px] transition-colors duration-300 max-[600px]:left-4 max-[600px]:top-12 max-[600px]:bottom-[-12px] ${stepStates[0] === "done" ? "bg-cleared" : "bg-border"}`}
+            />
             {/* Content */}
-            <div className={`font-mono text-[12px] font-bold tracking-[0.15em] uppercase mb-2 ${titleClass(stepStates[0])}`}>
+            <div
+              className={`font-mono text-[12px] font-bold tracking-[0.15em] uppercase mb-2 ${titleClass(stepStates[0])}`}
+            >
               Connect Your Account
             </div>
-            <div className={`text-[14px] leading-[1.65] mb-5 ${descClass(stepStates[0])}`}>
+            <div
+              className={`text-[14px] leading-[1.65] mb-5 ${descClass(stepStates[0])}`}
+            >
               Connect your account to permanently commemorate your clearance.
             </div>
             {/* Step 1 dynamic content */}
@@ -674,40 +782,64 @@ export default function VerifyFlow() {
           {/* Step 2: Prove You're Not a Piece of Shit */}
           <div className="relative pl-16 py-4 max-[600px]:pl-[52px] max-[600px]:py-3">
             {/* Circle */}
-            <div className={`absolute left-0 top-4 w-10 h-10 flex items-center justify-center font-serif text-[18px] border-[1.5px] rounded-full transition-all duration-300 max-[600px]:w-[34px] max-[600px]:h-[34px] max-[600px]:text-[15px] max-[600px]:top-3 ${circleClass(stepStates[1])}`}>
+            <div
+              className={`absolute left-0 top-4 w-10 h-10 flex items-center justify-center font-serif text-[18px] border-[1.5px] rounded-full transition-all duration-300 max-[600px]:w-[34px] max-[600px]:h-[34px] max-[600px]:text-[15px] max-[600px]:top-3 ${circleClass(stepStates[1])}`}
+            >
               {stepStates[1] === "done" ? (
-                <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className="w-4 h-4"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M3 8.5L6.5 12L13 4" />
                 </svg>
-              ) : "02"}
+              ) : (
+                "02"
+              )}
             </div>
             {/* Connecting line */}
-            <div className={`absolute left-[19px] top-14 bottom-[-16px] w-[1.5px] transition-colors duration-300 max-[600px]:left-4 max-[600px]:top-12 max-[600px]:bottom-[-12px] ${stepStates[1] === "done" ? "bg-cleared" : "bg-border"}`} />
+            <div
+              className={`absolute left-[19px] top-14 bottom-[-16px] w-[1.5px] transition-colors duration-300 max-[600px]:left-4 max-[600px]:top-12 max-[600px]:bottom-[-12px] ${stepStates[1] === "done" ? "bg-cleared" : "bg-border"}`}
+            />
             {/* Content */}
-            <div className={`font-mono text-[12px] font-bold tracking-[0.15em] uppercase mb-2 ${titleClass(stepStates[1])}`}>
+            <div
+              className={`font-mono text-[12px] font-bold tracking-[0.15em] uppercase mb-2 ${titleClass(stepStates[1])}`}
+            >
               Prove You&apos;re Not a Piece of Shit
             </div>
-            <div className={`text-[14px] leading-[1.65] mb-5 ${descClass(stepStates[1])}`}>
-              Sign in with Google. Nothing ever leaves the secure hardware environment. Your proof reveals one thing: whether Jeffrey Epstein&apos;s email ever appeared in your inbox. Nothing else. Just cleared or not.
+            <div
+              className={`text-[14px] leading-[1.65] mb-5 ${descClass(stepStates[1])}`}
+            >
+              Sign in with Google. Nothing ever leaves the secure hardware
+              environment. Your proof reveals one thing: whether Jeffrey
+              Epstein&apos;s email ever appeared in your inbox. Nothing else.
+              Just cleared or not.
             </div>
             {/* Step 2 dynamic content */}
             {isConnected && stepStates[1] === "active" && (
               <>
-                {(step === "choosing" || (step === "idle" && isConnected)) && !verifyMethod && (
-                  <button
-                    onClick={() => setShowInterstitial(true)}
-                    className="font-mono text-[12px] font-bold tracking-[0.15em] uppercase px-8 py-3.5 bg-fg text-bg border-none cursor-pointer transition-all hover:bg-accent hover:text-white"
-                  >
-                    Begin Verification
-                  </button>
-                )}
+                {(step === "choosing" || (step === "idle" && isConnected)) &&
+                  !verifyMethod && (
+                    <button
+                      onClick={() => setShowInterstitial(true)}
+                      className="font-mono text-[12px] font-bold tracking-[0.15em] uppercase px-8 py-3.5 bg-fg text-bg border-none cursor-pointer transition-all hover:bg-accent hover:text-white"
+                    >
+                      Begin Verification
+                    </button>
+                  )}
 
                 {ENABLE_OAUTH3 && verifyMethod === "oauth3" && (
                   <>
                     {oauthAbandoned && step === "choosing" && (
                       <div className="mt-1">
                         <div className="text-[14px] leading-[1.65] text-fg-muted mb-5">
-                          Looks like you didn&apos;t finish signing in. Google shows a warning because this app isn&apos;t verified yet. Here&apos;s how to get through:
+                          Looks like you didn&apos;t finish signing in. Google
+                          shows a warning because this app isn&apos;t verified
+                          yet. Here&apos;s how to get through:
                         </div>
                         <WalkthroughSteps />
                         <div className="flex flex-col items-center gap-3 mt-6">
@@ -785,19 +917,36 @@ export default function VerifyFlow() {
           {/* Step 3: Support Victims */}
           <div className="relative pl-16 py-4 max-[600px]:pl-[52px] max-[600px]:py-3">
             {/* Circle */}
-            <div className={`absolute left-0 top-4 w-10 h-10 flex items-center justify-center font-serif text-[18px] border-[1.5px] rounded-full transition-all duration-300 max-[600px]:w-[34px] max-[600px]:h-[34px] max-[600px]:text-[15px] max-[600px]:top-3 ${circleClass(stepStates[2])}`}>
+            <div
+              className={`absolute left-0 top-4 w-10 h-10 flex items-center justify-center font-serif text-[18px] border-[1.5px] rounded-full transition-all duration-300 max-[600px]:w-[34px] max-[600px]:h-[34px] max-[600px]:text-[15px] max-[600px]:top-3 ${circleClass(stepStates[2])}`}
+            >
               {stepStates[2] === "done" ? (
-                <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className="w-4 h-4"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M3 8.5L6.5 12L13 4" />
                 </svg>
-              ) : "03"}
+              ) : (
+                "03"
+              )}
             </div>
             {/* Content */}
-            <div className={`font-mono text-[12px] font-bold tracking-[0.15em] uppercase mb-2 ${titleClass(stepStates[2])}`}>
+            <div
+              className={`font-mono text-[12px] font-bold tracking-[0.15em] uppercase mb-2 ${titleClass(stepStates[2])}`}
+            >
               Wear the Proof
             </div>
-            <div className={`text-[14px] leading-[1.65] mb-5 ${descClass(stepStates[2])}`}>
-              Cleared? Grab a tshirt that only verified people can buy. All proceeds go to victims.
+            <div
+              className={`text-[14px] leading-[1.65] mb-5 ${descClass(stepStates[2])}`}
+            >
+              Cleared? Grab a tshirt that only verified people can buy. All
+              proceeds go to victims.
             </div>
             {/* Step 3 dynamic content */}
             {step === "submitting" && (
