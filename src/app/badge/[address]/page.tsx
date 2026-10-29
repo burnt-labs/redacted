@@ -1,13 +1,14 @@
-"use client";
 import { Suspense } from "react";
 import BadgeContent from "./BadgeContent";
 import Nav from "@/components/Nav";
 
-export default function BadgePage({
+export default async function BadgePage({
   params,
 }: {
-  params: { address: string };
+  params: Promise<{ address: string }>;
 }) {
+  const { address } = await params;
+
   return (
     <main className="min-h-screen flex flex-col">
       <Nav />
@@ -25,7 +26,7 @@ export default function BadgePage({
             </div>
           }
         >
-          <BadgeContent address={params.address} />
+          <BadgeContent address={address} />
         </Suspense>
       </div>
     </main>
