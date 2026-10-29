@@ -20,7 +20,7 @@ describe("/oauth3 reverse proxy", () => {
       const res = await GET(
         new NextRequest("https://theredactedfile.com/oauth3/x"),
         {
-          params: { path: ["x"] },
+          params: Promise.resolve({ path: ["x"] }),
         },
       );
       expect(res.status).toBe(503);
@@ -48,7 +48,7 @@ describe("/oauth3 reverse proxy", () => {
           headers: { cookie: "sid=s", connection: "close" },
         },
       ),
-      { params: { path: ["auth", "google"] } },
+      { params: Promise.resolve({ path: ["auth", "google"] }) },
     );
 
     const [url, init] = fetchMock.mock.calls[0];
@@ -77,7 +77,7 @@ describe("/oauth3 reverse proxy", () => {
         method: "POST",
         body: "{}",
       }),
-      { params: { path: ["verify"] } },
+      { params: Promise.resolve({ path: ["verify"] }) },
     );
     expect(res.status).toBe(200);
     expect(fetchMock.mock.calls[0][1].body).toBeTruthy();
@@ -88,8 +88,12 @@ describe("/oauth3 reverse proxy", () => {
     const { GET } = await load("https://oauth3.burnt.com");
     const req = () => new NextRequest("https://theredactedfile.com/oauth3/x");
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
-    expect((await GET(req(), { params: { path: ["x"] } })).status).toBe(502);
+    expect(
+      (await GET(req(), { params: Promise.resolve({ path: ["x"] }) })).status,
+    ).toBe(502);
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue("down"));
-    expect((await GET(req(), { params: { path: ["x"] } })).status).toBe(502);
+    expect(
+      (await GET(req(), { params: Promise.resolve({ path: ["x"] }) })).status,
+    ).toBe(502);
   });
 });

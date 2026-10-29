@@ -125,14 +125,14 @@ async function proxyToCvm(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } },
+  { params }: { params: Promise<{ path: string[] }> },
 ) {
-  return proxyToCvm(request, params.path);
+  return proxyToCvm(request, (await params).path);
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { path: string[] } },
+  { params }: { params: Promise<{ path: string[] }> },
 ) {
-  return proxyToCvm(request, params.path);
+  return proxyToCvm(request, (await params).path);
 }
