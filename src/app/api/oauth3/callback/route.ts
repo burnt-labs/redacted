@@ -28,7 +28,8 @@ export async function GET(request: NextRequest) {
   return new NextResponse(html, {
     headers: {
       "Content-Type": "text/html",
-      "Content-Security-Policy": "default-src 'none'; script-src 'unsafe-inline'",
+      "Content-Security-Policy":
+        "default-src 'none'; script-src 'unsafe-inline'",
     },
   });
 }

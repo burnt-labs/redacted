@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "workingDirectory": ".",
+  "commands": {
+    "install": "pnpm install --frozen-lockfile",
+    // next lint, the same gate the old deploy and preview workflows ran.
+    "lint": "pnpm lint",
+    "prettier": "pnpm format:check",
+    "typeCheck": "pnpm type-check",
+    "test": "pnpm test",
+    "coverage": "pnpm test:coverage",
+    // The OpenNext build runs `next build` and then bundles the Worker into
+    // .open-next/, which is what wrangler deploys. The deploy job runs this
+    // same command before uploading.
+    "build": "pnpm build:worker",
+  },
+  // Enforced by vitest.config.ts, which must move in step with this file.
+  // Measured baseline at migration over the server-side code (src/lib, the
+  // middleware and the route handlers), not a target. Ratchet upward only.
+  "coverageThresholds": {
+    "lines": 97,
+    "functions": 96,
+    "branches": 98,
+  },
+}

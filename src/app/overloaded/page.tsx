@@ -79,11 +79,10 @@ export default function OverloadedPage() {
         {/* Body copy */}
         <div className="space-y-4 text-[15px] leading-[1.7] text-fg-muted">
           <p>
-            We&apos;re experiencing unprecedented demand. It turns out a lot of people are very eager to prove they never emailed Jeffrey Epstein.
+            We&apos;re experiencing unprecedented demand. It turns out a lot of
+            people are very eager to prove they never emailed Jeffrey Epstein.
           </p>
-          <p>
-            The truth can wait a few minutes.
-          </p>
+          <p>The truth can wait a few minutes.</p>
         </div>
 
         {/* Retry countdown */}
@@ -115,7 +114,8 @@ export default function OverloadedPage() {
             While You Wait
           </div>
           <p className="text-[14px] leading-[1.7] text-fg-muted">
-            Share the site. The more people who get cleared, the more interesting the list of people who don&apos;t becomes.
+            Share the site. The more people who get cleared, the more
+            interesting the list of people who don&apos;t becomes.
           </p>
           <button
             onClick={handleCopyLink}
@@ -127,7 +127,8 @@ export default function OverloadedPage() {
 
         {/* Footer note */}
         <p className="text-xs text-fg-light">
-          All proceeds from The [Redacted] File store go directly to supporting victims through the Asiyah Women&apos;s Center.
+          All proceeds from The [Redacted] File store go directly to supporting
+          victims through the Asiyah Women&apos;s Center.
         </p>
       </div>
     </main>

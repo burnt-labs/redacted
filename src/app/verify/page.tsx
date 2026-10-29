@@ -27,7 +27,8 @@ export default function VerifyPage() {
         <div className="text-center mb-14">
           <h1 className="font-serif text-[42px] text-fg mb-3">Get Cleared</h1>
           <p className="text-[15px] leading-[1.6] text-fg-muted max-w-[400px] mx-auto">
-            Complete the steps below to receive your clearance badge. It takes less than a minute.
+            Complete the steps below to receive your clearance badge. It takes
+            less than a minute.
           </p>
         </div>
 
